@@ -1,0 +1,20 @@
+{
+  "name": "herald",
+  "private": true,
+  "version": "2.0.0",
+  "description": "Combined Franchise Titan React frontend and Laravel backend",
+  "scripts": {
+    "install:frontend": "npm --prefix frontend ci",
+    "build": "npm --prefix frontend run build && node scripts/copy-frontend-build.mjs",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "php backend/artisan serve --host=0.0.0.0 --port=8080",
+    "lint": "npm --prefix frontend run lint",
+    "test:frontend": "npm --prefix frontend run lint && npm --prefix frontend run build",
+    "test:backend": "php backend/artisan test",
+    "install:backend": "composer install --working-dir=backend --no-interaction --prefer-dist"
+  },
+  "engines": {
+    "node": ">=22",
+    "php": ">=8.2"
+  }
+}

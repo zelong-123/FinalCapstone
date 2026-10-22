@@ -1,0 +1,145 @@
+/* Franchise operations additions: pipeline, activities, dashboard and archive UI. */
+
+/* Utilities */
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.form-section-title {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+  margin: 18px 0 9px; color: var(--text); font-size: 10px; font-weight: 740;
+  text-transform: uppercase; letter-spacing: .05em;
+}
+.form-section-title:first-of-type { margin-top: 0; }
+.form-section-hint { color: var(--muted); font-size: 8px; font-weight: 600; text-transform: none; letter-spacing: 0; }
+.muted-note { color: var(--muted); font-size: 8px; line-height: 1.6; }
+
+/* Tabs */
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.tab {
+  min-height: 34px; padding: 7px 14px; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--surface-subtle); color: var(--text-secondary);
+  font-size: 9px; font-weight: 720; cursor: pointer; transition: .16s ease;
+}
+.tab:hover { color: var(--text); border-color: var(--border-strong); background: var(--hover); }
+.tab.active { color: var(--accent-text); border-color: color-mix(in srgb, var(--accent) 42%, transparent); background: var(--active); }
+
+/* Progress bar */
+.progress-track { height: 7px; width: 100%; overflow: hidden; border-radius: 999px; background: var(--surface-strong); }
+.progress-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .45s cubic-bezier(.2,.8,.2,1); }
+.progress-fill.state-complete { background: linear-gradient(90deg, var(--success), var(--success-text)); }
+.progress-fill.state-rejected { background: linear-gradient(90deg, var(--danger), var(--danger-text)); }
+.progress-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 5px; color: var(--muted); font-size: 8px; }
+.progress-meta strong { color: var(--text-secondary); font-weight: 720; }
+.progress-cell { min-width: 128px; display: flex; flex-direction: column; }
+
+/* Hover popover (progress indicator card) */
+.hover-anchor { position: relative; display: inline-flex; }
+.hover-trigger {
+  display: inline-flex; align-items: center; gap: 6px; border: 0; padding: 0;
+  background: none; color: inherit; font: inherit; cursor: help;
+}
+.hover-popover {
+  position: absolute; z-index: 40; top: calc(100% + 9px); left: 50%; transform: translate(-50%, -4px);
+  width: 268px; padding: 13px; border: 1px solid var(--border-strong); border-radius: 14px;
+  background: var(--panel-3); box-shadow: var(--shadow-lg);
+  opacity: 0; visibility: hidden; pointer-events: none; transition: .16s ease;
+}
+.hover-anchor:hover .hover-popover,
+.hover-anchor:focus-within .hover-popover { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+.hover-popover > strong { display: block; margin-bottom: 8px; color: var(--text); font-size: 10px; }
+.hover-popover p { margin: 9px 0 0; color: var(--muted); font-size: 8px; line-height: 1.6; }
+.hover-popover ul { margin: 9px 0 0; padding: 0; list-style: none; }
+.hover-popover li { display: flex; align-items: center; gap: 7px; padding: 3px 0; color: var(--text-secondary); font-size: 8px; }
+
+/* Checklist */
+.checklist { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 8px; }
+.checklist-item {
+  display: flex; align-items: flex-start; gap: 9px; padding: 10px 12px;
+  border: 1px solid var(--border); border-radius: 12px; background: var(--surface-subtle);
+  cursor: pointer; text-align: left; transition: .16s ease;
+}
+.checklist-item:hover { border-color: var(--border-strong); background: var(--hover); }
+.checklist-item.checked { border-color: color-mix(in srgb, var(--success) 32%, transparent); background: color-mix(in srgb, var(--success) 7%, transparent); }
+.checklist-box {
+  width: 15px; height: 15px; flex: 0 0 auto; margin-top: 1px; display: grid; place-items: center;
+  border: 1px solid var(--border-strong); border-radius: 5px; background: var(--input-bg); color: transparent;
+}
+.checklist-item.checked .checklist-box { background: var(--success); border-color: var(--success); color: #04120c; }
+.checklist-copy strong { display: block; color: var(--text-secondary); font-size: 9px; font-weight: 640; }
+.checklist-item.checked .checklist-copy strong { color: var(--text); }
+
+/* Stage stepper */
+.stage-track { display: flex; flex-wrap: wrap; gap: 5px; margin: 4px 0 2px; }
+.stage-step {
+  min-height: 25px; padding: 4px 9px; border: 1px solid var(--border); border-radius: 999px;
+  color: var(--muted); background: var(--surface-subtle); font-size: 8px; font-weight: 700; cursor: pointer;
+}
+.stage-step:hover { border-color: var(--border-strong); color: var(--text-secondary); }
+.stage-step.current { color: #fff; border-color: transparent; background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+.stage-step.done { color: var(--success-text); border-color: color-mix(in srgb, var(--success) 28%, transparent); background: color-mix(in srgb, var(--success) 8%, transparent); }
+.stage-step.blocked { color: var(--danger-text); border-color: color-mix(in srgb, var(--danger) 28%, transparent); background: color-mix(in srgb, var(--danger) 8%, transparent); }
+
+/* Vertical bar graph (sales trend) */
+.bar-graph { display: flex; align-items: flex-end; gap: 9px; height: 190px; padding: 18px; overflow-x: auto; }
+.bar-graph-col { flex: 1 1 0; min-width: 34px; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 7px; }
+.bar-graph-value { color: var(--text-secondary); font-size: 8px; font-weight: 700; }
+.bar-graph-bar {
+  width: 100%; min-height: 4px; border-radius: 7px 7px 3px 3px;
+  background: linear-gradient(180deg, var(--accent-2), var(--accent));
+  box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 18%, transparent);
+  transform-origin: bottom; animation: barGrow .8s cubic-bezier(.2,.8,.2,1) both;
+}
+.bar-graph-bar.is-peak { background: linear-gradient(180deg, var(--accent), var(--success)); }
+.bar-graph-label { color: var(--muted); font-size: 8px; white-space: nowrap; }
+
+/* Alerts + insights */
+.alert-list { display: grid; gap: 8px; padding: 15px 18px; }
+.alert-item {
+  display: flex; align-items: flex-start; gap: 9px; padding: 10px 12px;
+  border: 1px solid var(--border); border-radius: 12px; font-size: 9px; line-height: 1.55;
+}
+.alert-item.severity-danger { color: var(--danger-text); border-color: color-mix(in srgb, var(--danger) 26%, transparent); background: color-mix(in srgb, var(--danger) 7%, transparent); }
+.alert-item.severity-warning { color: var(--warning-text); border-color: color-mix(in srgb, var(--warning) 26%, transparent); background: color-mix(in srgb, var(--warning) 7%, transparent); }
+.alert-item.severity-clear { color: var(--success-text); border-color: color-mix(in srgb, var(--success) 26%, transparent); background: color-mix(in srgb, var(--success) 7%, transparent); }
+.insight-list { display: grid; gap: 9px; padding: 15px 18px; }
+.insight-item { display: flex; align-items: flex-start; gap: 9px; color: var(--text-secondary); font-size: 9px; line-height: 1.6; }
+
+/* Per-person activity groups */
+.person-row-name { display: flex; flex-direction: column; gap: 2px; }
+.person-row-name strong { color: var(--text); font-size: 10px; }
+.person-row-name small { color: var(--muted); font-size: 8px; }
+.activity-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.activity-chip {
+  display: inline-flex; align-items: center; gap: 5px; padding: 4px 9px;
+  border: 1px solid var(--border); border-radius: 999px; background: var(--surface-subtle);
+  color: var(--text-secondary); font-size: 8px;
+}
+.activity-chip.is-completed { color: var(--success-text); border-color: color-mix(in srgb, var(--success) 28%, transparent); background: color-mix(in srgb, var(--success) 8%, transparent); }
+.activity-chip.is-overdue { color: var(--danger-text); border-color: color-mix(in srgb, var(--danger) 28%, transparent); background: color-mix(in srgb, var(--danger) 8%, transparent); }
+
+/* Duration picker */
+.duration-presets { display: flex; flex-wrap: wrap; gap: 6px; }
+.duration-preset {
+  min-height: 30px; padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--surface-subtle); color: var(--text-secondary); font-size: 8px; font-weight: 700; cursor: pointer;
+}
+.duration-preset:hover { border-color: var(--border-strong); color: var(--text); }
+.duration-preset.active { color: var(--accent-text); border-color: color-mix(in srgb, var(--accent) 42%, transparent); background: var(--active); }
+
+/* Archive */
+.archive-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.archive-stat { padding: 14px 16px; border: 1px solid var(--border); border-radius: 15px; background: var(--panel-2); }
+.archive-stat span { display: block; color: var(--muted); font-size: 8px; text-transform: uppercase; letter-spacing: .06em; }
+.archive-stat strong { display: block; margin-top: 6px; color: var(--text); font-size: 22px; font-weight: 760; }
+.archive-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 18px; border-bottom: 1px solid var(--border); }
+.archive-item:last-child { border-bottom: 0; }
+.archive-item-copy strong { display: block; color: var(--text); font-size: 10px; }
+.archive-item-copy small { color: var(--muted); font-size: 8px; }
+
+@media (max-width: 720px) {
+  .checklist { grid-template-columns: 1fr; }
+  .hover-popover { left: 0; transform: translate(0, -4px); width: min(268px, 78vw); }
+  .hover-anchor:hover .hover-popover,
+  .hover-anchor:focus-within .hover-popover { transform: translate(0, 0); }
+}

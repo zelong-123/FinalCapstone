@@ -1,0 +1,893 @@
+/* ==========================================================================
+   Activities.css
+   Uses your theme variables (--border, --surface-subtle, --muted, --text,
+   --accent, --drawer-border, --drawer-muted) with the same fallbacks as before.
+   Everything is scoped under .activities-page (root div in Activities.jsx).
+
+   Spacing + shape rules used throughout:
+   - panels: 20-24px inner padding, nothing touches a border
+   - radius: 10px panels, 8px controls, 6px cells/boxes, 4px event chips
+   ========================================================================== */
+
+.activities-page {
+  --act-radius-panel: 10px;
+  --act-radius-control: 8px;
+  --act-radius-cell: 6px;
+  --act-pad: 22px;
+  --act-line: var(--border, #262f45);
+  --act-cell: var(--surface-subtle, rgba(255, 255, 255, 0.03));
+  --act-accent: var(--accent, #7b88ff);
+}
+
+/* Modals are rendered in a portal on <body> (so they stay centered in the
+   viewport however far the page is scrolled). This wrapper only carries the
+   scoped styles and variables; it creates no box of its own. */
+.activities-modal-root {
+  display: contents;
+}
+
+/* Panels in this page: calmer corners than the global theme */
+.activities-page .data-panel {
+  border-radius: var(--act-radius-panel);
+}
+
+/* Shared panel layout: header + padded body.
+   Three-class selectors so global .data-panel rules cannot strip the padding. */
+.activities-page .data-panel .act-head {
+  box-sizing: border-box;
+  padding: 18px var(--act-pad);
+}
+
+.activities-page .data-panel .act-body {
+  box-sizing: border-box;
+  padding: var(--act-pad);
+}
+
+/* ---------- View switch: Table | Calendar | Per person ---------- */
+
+.activities-page .activity-view-toggle {
+  display: inline-flex;
+  gap: 4px;
+  margin: 0 0 18px;
+  padding: 4px;
+  border: 1px solid var(--act-line);
+  border-radius: var(--act-radius-control);
+  background: var(--act-cell);
+}
+
+.activities-page .activity-view-toggle button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: var(--act-radius-cell);
+  background: transparent;
+  color: var(--muted, #8590a8);
+  font-size: 13px;
+  font-weight: 650;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.activities-page .activity-view-toggle button:hover {
+  color: var(--text, inherit);
+}
+
+.activities-page .activity-view-toggle button.active {
+  background: rgba(123, 136, 255, 0.18);
+  color: var(--accent, #aeb6ff);
+}
+
+.activities-page .activity-view-toggle button:focus-visible {
+  outline: 2px solid var(--act-accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Calendar nav (shared) ----------
+   [<] [Month v] [Year v] [>]  [Today]                                  */
+
+.activities-page .cal-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  padding: 5px;
+  border: 1px solid var(--act-line);
+  border-radius: var(--act-radius-control);
+  background: var(--act-cell);
+}
+
+.activities-page .cal-nav-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--act-radius-cell);
+  background: transparent;
+  color: var(--text, inherit);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.activities-page .cal-nav-btn:hover {
+  background: rgba(123, 136, 255, 0.18);
+  border-color: rgba(123, 136, 255, 0.4);
+  color: var(--accent, #aeb6ff);
+}
+
+.activities-page .cal-nav-pickers {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.activities-page .cal-nav-select {
+  height: 32px;
+  padding: 0 28px 0 12px;
+  border: 1px solid var(--act-line);
+  border-radius: var(--act-radius-cell);
+  background-color: rgba(255, 255, 255, 0.03);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%238590a8' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  color: var(--text, inherit);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  color-scheme: dark;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 0.15s ease;
+}
+
+.activities-page .cal-nav-select:hover,
+.activities-page .cal-nav-select:focus-visible {
+  border-color: var(--act-accent);
+  outline: none;
+}
+
+.activities-page .cal-nav-today {
+  height: 32px;
+  padding: 0 16px;
+  border: 1px solid var(--act-accent);
+  border-radius: var(--act-radius-cell);
+  background: var(--act-accent);
+  color: #fff;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 1;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.activities-page .cal-nav-today:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+/* Already on the current month: clearly readable, just not clickable. */
+.activities-page .cal-nav-today:disabled {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--act-line);
+  color: #a3adc4;
+  opacity: 1;
+  cursor: default;
+}
+
+.activities-page .cal-nav-btn:focus-visible,
+.activities-page .cal-nav-today:focus-visible {
+  outline: 2px solid var(--act-accent);
+  outline-offset: 2px;
+}
+
+/* Compact nav (Per person calendar): fills the panel width */
+.activities-page .cal-nav.is-compact {
+  display: flex;
+  width: 100%;
+  margin: 0 0 18px;
+}
+
+.activities-page .cal-nav.is-compact .cal-nav-pickers {
+  flex: 1;
+  min-width: 0;
+}
+
+.activities-page .cal-nav.is-compact .cal-nav-select {
+  flex: 1;
+  min-width: 0;
+  font-size: 12.5px;
+}
+
+.activities-page .cal-nav.is-compact .cal-nav-select:first-child {
+  flex: 1.5;
+}
+
+/* ---------- Calendar view: full-width month grid ---------- */
+
+.activities-page .big-calendar-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.activities-page .big-calendar-scroll {
+  overflow-x: auto;
+}
+
+.activities-page .big-calendar {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+  min-width: 680px;
+}
+
+.activities-page .big-calendar-weekday {
+  padding: 0 0 4px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted, #8590a8);
+}
+
+.activities-page .big-calendar-day {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-sizing: border-box;
+  min-height: 96px;
+  padding: 8px 10px;
+  border: 1px solid var(--act-line);
+  border-radius: var(--act-radius-cell);
+  background: var(--act-cell);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.activities-page .big-calendar-day.is-empty {
+  visibility: hidden;
+}
+
+.activities-page .big-calendar-day.is-clickable {
+  cursor: pointer;
+}
+
+.activities-page .big-calendar-day.is-clickable:hover,
+.activities-page .big-calendar-day.is-clickable:focus-visible {
+  border-color: var(--act-accent);
+  background: rgba(123, 136, 255, 0.06);
+  outline: none;
+}
+
+.activities-page .big-calendar-day.is-today {
+  border-color: var(--act-accent);
+  box-shadow: inset 0 0 0 1px var(--act-accent);
+}
+
+.activities-page .big-calendar-day-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-height: 20px;
+}
+
+.activities-page .big-calendar-daynum {
+  font-size: 12px;
+  font-weight: 750;
+  color: var(--text-secondary, inherit);
+}
+
+.activities-page .big-calendar-day.is-today .big-calendar-daynum {
+  color: var(--accent, #aeb6ff);
+}
+
+.activities-page .big-calendar-add {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid var(--act-line);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--muted, #8590a8);
+  font-size: 9px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.activities-page .big-calendar-day:hover .big-calendar-add,
+.activities-page .big-calendar-add:focus-visible {
+  opacity: 1;
+}
+
+.activities-page .big-calendar-add:hover {
+  color: var(--accent, #aeb6ff);
+  border-color: var(--act-accent);
+}
+
+.activities-page .big-calendar-events {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.activities-page .big-calendar-event {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 3px 8px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-size: 10.5px;
+  font-weight: 620;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.activities-page .big-calendar-event:hover {
+  filter: brightness(1.2);
+}
+
+.activities-page .big-calendar-event small {
+  margin-right: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  opacity: 0.75;
+}
+
+.activities-page .big-calendar-event.type-orientation {
+  background: rgba(123, 136, 255, 0.16);
+  border-color: rgba(123, 136, 255, 0.35);
+  color: #aeb6ff;
+}
+
+.activities-page .big-calendar-event.type-product_tasting {
+  background: rgba(244, 184, 74, 0.14);
+  border-color: rgba(244, 184, 74, 0.32);
+  color: #ffd284;
+}
+
+.activities-page .big-calendar-event.type-training {
+  background: rgba(34, 197, 94, 0.13);
+  border-color: rgba(34, 197, 94, 0.32);
+  color: #75e2bd;
+}
+
+.activities-page .big-calendar-event.type-other {
+  background: rgba(148, 163, 184, 0.13);
+  border-color: rgba(148, 163, 184, 0.3);
+  color: #cbd5e1;
+}
+
+.activities-page .big-calendar-event.is-done {
+  opacity: 0.62;
+  text-decoration: line-through;
+}
+
+.activities-page .big-calendar-event.is-overdue {
+  border-color: rgba(244, 63, 94, 0.5);
+}
+
+.activities-page .big-calendar-more {
+  padding-left: 4px;
+  font-size: 10px;
+  font-weight: 650;
+  color: var(--muted, #8590a8);
+}
+
+.activities-page .big-calendar-hint {
+  margin: 16px 0 0;
+  font-size: 11.5px;
+  color: var(--muted, #8590a8);
+}
+
+/* ---------- Per person view ---------- */
+
+/* Calendar takes the wider column, category chart the narrower one */
+.activities-page .activity-people-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+/* Mini month calendar: bordered day boxes */
+.activities-page .activity-calendar {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.activities-page .activity-calendar-weekday {
+  padding-bottom: 2px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted, #8590a8);
+}
+
+.activities-page .activity-calendar-day {
+  position: relative;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  height: 44px;
+  border: 1px solid var(--act-line);
+  border-radius: var(--act-radius-cell);
+  background: var(--act-cell);
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--text, inherit);
+}
+
+.activities-page .activity-calendar-day.is-empty {
+  border-color: transparent;
+  background: transparent;
+}
+
+.activities-page .activity-calendar-day.is-today {
+  border-color: var(--act-accent);
+  box-shadow: inset 0 0 0 1px var(--act-accent);
+  color: var(--accent, #aeb6ff);
+}
+
+.activities-page .activity-calendar-day.is-scheduled {
+  background: rgba(123, 136, 255, 0.14);
+  border-color: rgba(123, 136, 255, 0.4);
+}
+
+.activities-page .activity-calendar-day.is-completed-day {
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.activities-page .activity-calendar-dot {
+  position: absolute;
+  bottom: 5px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Category chart: one bordered box per category, label left, count right.
+   A soft fill inside each box shows its share of the busiest category. */
+.activities-page .act-cat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.activities-page .act-cat-row {
+  --cat: #aeb6ff;
+  --cat-bg: rgba(123, 136, 255, 0.16);
+  --cat-line: rgba(123, 136, 255, 0.45);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-sizing: border-box;
+  min-height: 48px;
+  padding: 0 16px;
+  border: 1px solid var(--cat-line);
+  border-radius: var(--act-radius-cell);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--cat);
+  overflow: hidden;
+}
+
+.activities-page .act-cat-row.type-product_tasting {
+  --cat: #ffd284;
+  --cat-bg: rgba(244, 184, 74, 0.16);
+  --cat-line: rgba(244, 184, 74, 0.45);
+}
+
+.activities-page .act-cat-row.type-training {
+  --cat: #75e2bd;
+  --cat-bg: rgba(34, 197, 94, 0.16);
+  --cat-line: rgba(34, 197, 94, 0.45);
+}
+
+.activities-page .act-cat-row.type-other {
+  --cat: #cbd5e1;
+  --cat-bg: rgba(148, 163, 184, 0.16);
+  --cat-line: rgba(148, 163, 184, 0.45);
+}
+
+.activities-page .act-cat-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--cat-bg);
+  transition: width 0.4s ease;
+}
+
+.activities-page .act-cat-label,
+.activities-page .act-cat-count {
+  position: relative;
+}
+
+.activities-page .act-cat-label {
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.activities-page .act-cat-count {
+  font-size: 15px;
+  font-weight: 750;
+}
+
+/* ---------- Table view ---------- */
+
+.activities-page .person-row-name {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.activities-page .person-row-name strong {
+  color: var(--text, inherit);
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+.activities-page .person-row-name small {
+  color: var(--muted, #8590a8);
+  font-size: 12.5px;
+}
+
+.activities-page .row-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.activities-page .muted-note {
+  color: var(--muted, #8590a8);
+  font-size: 12px;
+}
+
+.activities-page .activities-footnote {
+  margin-top: 14px;
+}
+
+.activities-page .activity-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 6px 12px;
+  border-radius: var(--act-radius-cell);
+  border: 1px solid var(--act-line);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.activities-page .activity-chip small {
+  color: var(--muted, #8590a8);
+  font-weight: 500;
+}
+
+.activities-page .activity-chip.is-completed {
+  border-color: rgba(34, 197, 94, 0.4);
+  color: #22c55e;
+}
+
+.activities-page .activity-chip.is-overdue {
+  border-color: rgba(244, 63, 94, 0.45);
+  color: #f43f5e;
+}
+
+/* ---------- Schedule form: activity types, durations, titles ---------- */
+
+.activities-page .activity-type-multi,
+.activities-page .duration-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.activities-page .activity-type-chip,
+.activities-page .duration-preset {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: var(--act-radius-cell);
+  border: 1px solid var(--act-line);
+  background: transparent;
+  color: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.activities-page .activity-type-chip:hover,
+.activities-page .duration-preset:hover {
+  border-color: var(--act-accent);
+}
+
+.activities-page .activity-type-chip.active,
+.activities-page .duration-preset.active {
+  background: rgba(123, 136, 255, 0.16);
+  border-color: var(--act-accent);
+  color: var(--accent, #aeb6ff);
+}
+
+.activities-page .activity-title-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.activities-page .activity-title-preview span {
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: rgba(123, 136, 255, 0.08);
+  border: 1px dashed rgba(123, 136, 255, 0.35);
+  font-size: 12px;
+}
+
+/* ---------- Slide-in drawer additions (palette matches InquiryDrawer.css) ---------- */
+
+.activities-page .drawer-progress-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.activities-page .drawer-progress-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.activities-page .drawer-progress-list li span:last-child {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.activities-page .drawer-progress-list small {
+  color: var(--drawer-muted, #8590a8);
+}
+
+.activities-page .drawer-progress-list li.is-done strong {
+  color: #22c55e;
+}
+
+.activities-page .drawer-progress-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--drawer-border, #1a2133);
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.activities-page .drawer-progress-list li.is-done .drawer-progress-icon {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: #22c55e;
+}
+
+.activities-page .drawer-activity-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.activities-page .drawer-activity-list li {
+  border: 1px solid var(--drawer-border, #1a2133);
+  border-radius: var(--act-radius-cell);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.activities-page .drawer-activity-list small {
+  color: var(--drawer-muted, #8590a8);
+}
+
+.activities-page .drawer-activity-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.activities-page .drawer-activity-list p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--drawer-muted, #8590a8);
+}
+
+.activities-page .drawer-attendees {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.activities-page .drawer-attendees svg {
+  margin-top: 3px;
+  color: var(--drawer-muted, #8590a8);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 960px) {
+  .activities-page .activity-people-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .activities-page {
+    --act-pad: 16px;
+  }
+
+  .activities-page .activity-view-toggle {
+    display: flex;
+    width: 100%;
+  }
+
+  .activities-page .activity-view-toggle button {
+    flex: 1;
+    justify-content: center;
+    padding: 8px 10px;
+  }
+
+  .activities-page .cal-nav {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .activities-page .big-calendar-day {
+    min-height: 76px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .activities-page * {
+    transition: none !important;
+  }
+}
+
+/* ==========================================================================
+   IDAGDAG ITO SA PINAKA-DULO NG Activities.css
+   (bago ang @media (prefers-reduced-motion) block, o kahit sa pinaka-baba)
+
+   Optional cleanup: pwede mo nang burahin ang `.activity-type-multi`,
+   `.activity-type-chip` at `.activity-title-preview` rules — hindi na ginagamit.
+   Huwag burahin ang `.duration-presets` / `.duration-preset`.
+   ========================================================================== */
+
+/* ---------- "Set Again" button (primary-button, sized for a table row) ---------- */
+
+.activities-page .row-actions .set-again-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+/* ---------- Applicant dropdown highlight (opened from "Set Again") ----------
+   Blinks 4 times (~3.2s), then settles into a steady highlight so the person
+   being scheduled is never in doubt. */
+
+.activities-modal-root select.applicant-select-highlight {
+  border-color: var(--act-accent, #7b88ff);
+  background-color: rgba(123, 136, 255, 0.16);
+  box-shadow: 0 0 0 2px rgba(123, 136, 255, 0.45);
+  color: var(--accent, #aeb6ff);
+  font-weight: 650;
+  animation: applicant-select-blink 0.8s ease-in-out 4;
+}
+
+@keyframes applicant-select-blink {
+  0%,
+  100% {
+    background-color: rgba(123, 136, 255, 0.16);
+    box-shadow: 0 0 0 2px rgba(123, 136, 255, 0.45);
+  }
+  50% {
+    background-color: rgba(123, 136, 255, 0.42);
+    box-shadow: 0 0 0 6px rgba(123, 136, 255, 0.35);
+  }
+}
+
+/* ---------- People attending: chips + dropdown/typing input ---------- */
+
+.activities-modal-root .participant-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.activities-modal-root .participant-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.activities-modal-root .participant-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 6px 5px 12px;
+  border: 1px solid rgba(123, 136, 255, 0.4);
+  border-radius: 6px;
+  background: rgba(123, 136, 255, 0.14);
+  color: var(--accent, #aeb6ff);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.activities-modal-root .participant-chip button {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.activities-modal-root .participant-chip button:hover,
+.activities-modal-root .participant-chip button:focus-visible {
+  background: rgba(244, 63, 94, 0.2);
+  color: #f43f5e;
+  opacity: 1;
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .activities-modal-root select.applicant-select-highlight {
+    animation: none;
+  }
+}

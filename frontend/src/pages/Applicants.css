@@ -1,0 +1,1138 @@
+/* Applicant Pipeline UI enhancements.
+   Imported by Applicants.jsx. Uses the existing dark navy / violet theme. */
+
+.ap-hover-anchor {
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  cursor: help;
+  outline: none;
+}
+.ap-hover-anchor:focus-visible {
+  border-radius: 5px;
+  outline: 2px solid #8175ff;
+  outline-offset: 3px;
+}
+.ap-hover-card {
+  position: fixed !important;
+  z-index: 2147483000 !important;
+  box-sizing: border-box;
+  max-width: calc(100vw - 16px);
+  padding: 15px 16px;
+  color: #edf0fa;
+  background: #111624;
+  border: 1px solid #343b50;
+  border-radius: 10px;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, .55), 0 3px 12px rgba(0, 0, 0, .3);
+  pointer-events: auto;
+  isolation: isolate;
+}
+.ap-hover-card::before {
+  content: "";
+  position: absolute;
+  left: clamp(14px, var(--arrow-x), calc(100% - 14px));
+  top: -7px;
+  width: 12px;
+  height: 12px;
+  background: #111624;
+  border-left: 1px solid #343b50;
+  border-top: 1px solid #343b50;
+  transform: translateX(-50%) rotate(45deg);
+}
+.ap-hover-card.flipped::before {
+  top: auto;
+  bottom: -7px;
+  border: 0;
+  border-right: 1px solid #343b50;
+  border-bottom: 1px solid #343b50;
+}
+.ap-hover-title,
+.ap-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.ap-hover-title {
+  margin-bottom: 13px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+.ap-hover-title small,
+.ap-section-head small {
+  color: #9ba5bd;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.ap-stepper {
+  display: flex;
+  align-items: flex-start;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 0;
+}
+.ap-step {
+  flex: 1 1 0;
+  min-width: 0;
+  position: relative;
+  text-align: center;
+}
+.ap-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: calc(50% + 13px);
+  right: calc(-50% + 13px);
+  height: 2px;
+  background: #30364c;
+}
+.ap-step.line-done:not(:last-child)::after { background: #25c77a; }
+.ap-step-inner {
+  display: flex;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 0 3px;
+  align-items: center;
+  flex-direction: column;
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: default;
+}
+button.ap-step-inner { cursor: pointer; }
+button.ap-step-inner:disabled { cursor: not-allowed; opacity: .6; }
+.ap-node {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #20263b;
+  border: 1px solid #3a4261;
+  color: #9ba5bd;
+  font-size: 10px;
+  font-weight: 700;
+}
+.ap-step.is-done .ap-node {
+  color: #071a12;
+  background: #25c77a;
+  border-color: #25c77a;
+}
+.ap-step.is-current .ap-node {
+  color: #fff;
+  background: #7668f6;
+  border-color: #8b80ff;
+  box-shadow: 0 0 0 3px rgba(118, 104, 246, .14);
+}
+.ap-step-label {
+  max-width: 100%;
+  color: #9ba5bd;
+  font-size: 10px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.ap-step.is-done .ap-step-label { color: #45d991; }
+.ap-step.is-current .ap-step-label { color: #f1f0ff; font-weight: 700; }
+
+.ap-section {
+  margin: 0 0 17px;
+  padding: 17px;
+  border: 1px solid #2a3041;
+  border-radius: 13px;
+  background: #141a28;
+}
+.ap-section h3 {
+  margin: 0;
+  color: #edf0fa;
+  font-size: 13px;
+  font-weight: 750;
+}
+.ap-section-head { margin-bottom: 15px; }
+.ap-checklist {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  margin-top: 15px;
+}
+.ap-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid #303749;
+  border-radius: 11px;
+  background: #191f2e;
+  color: #d4daea;
+  text-align: left;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background .16s ease, border-color .16s ease;
+}
+.ap-check:hover { border-color: #6258c9; background: #1d2335; }
+.ap-check.checked {
+  border-color: rgba(37, 199, 122, .45);
+  background: rgba(37, 199, 122, .07);
+}
+.ap-box {
+  display: inline-flex;
+  flex: 0 0 17px;
+  width: 17px;
+  height: 17px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #4a5268;
+  border-radius: 5px;
+  color: #071a12;
+  background: #0d1220;
+  font-size: 10px;
+}
+.ap-check.checked .ap-box { border-color: #25c77a; background: #25c77a; }
+.ap-records {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+.ap-record {
+  padding: 12px;
+  border-radius: 9px;
+  background: #0f1420;
+  border: 1px solid #2a3041;
+}
+.ap-record h4 { margin: 0 0 9px; font-size: 12px; color: #edf0fa; }
+.ap-record dl {
+  display: grid;
+  grid-template-columns: minmax(70px, .8fr) minmax(0, 1.2fr);
+  gap: 5px 10px;
+  margin: 0;
+  font-size: 11px;
+}
+.ap-record dt { color: #8f99b1; }
+.ap-record dd { margin: 0; color: #d5dbee; overflow-wrap: anywhere; }
+.ap-details summary {
+  color: #e4e8f4;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.ap-details[open] summary { margin-bottom: 16px; }
+.ap-rejected { color: #ff888e !important; }
+.ap-reject,
+.ap-danger-text {
+  color: #ff8d94;
+}
+.ap-muted { color: #9ba5bd; font-size: 12px; }
+.ap-sub-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483001;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(4, 7, 14, .72);
+  backdrop-filter: blur(3px);
+}
+.ap-subform {
+  width: min(100%, 390px);
+  padding: 22px;
+  border: 1px solid #343b50;
+  border-radius: 16px;
+  background: #111624;
+  color: #edf0fa;
+  box-shadow: 0 22px 70px rgba(0,0,0,.5);
+}
+.ap-subform h3 { margin: 0 0 18px; font-size: 15px; }
+.ap-label {
+  display: grid;
+  gap: 7px;
+  margin: 13px 0;
+  color: #b9c1d5;
+  font-size: 11px;
+  font-weight: 600;
+}
+.ap-label input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 1px solid #303749;
+  border-radius: 9px;
+  outline: none;
+  color: #edf0fa;
+  background: #0b101b;
+  font: inherit;
+}
+.ap-label input:focus { border-color: #8175ff; box-shadow: 0 0 0 3px rgba(129,117,255,.12); }
+.ap-subform-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+.ap-spacer { flex: 1; }
+.ap-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.ap-single { grid-template-columns: 1fr; }
+
+@media (max-width: 720px) {
+  .ap-checklist, .ap-records { grid-template-columns: 1fr; }
+  .ap-section { padding: 13px; }
+  .ap-stepper { overflow-x: auto; padding-bottom: 5px; }
+  .ap-step { min-width: 66px; }
+  .ap-step-label { font-size: 9px; }
+}
+
+/* Applicant navigation tabs: compact, professional horizontal navigation. */
+.ap-tabs {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 5px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 0 18px;
+  padding: 5px;
+  overflow-x: auto;
+  border: 1px solid #293246;
+  border-radius: 12px;
+  background: #111827;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .025);
+  scrollbar-width: thin;
+  scrollbar-color: #39435b transparent;
+}
+.ap-tabs .ap-tab {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 35px;
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: #aab4c8;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color .16s ease, background .16s ease, border-color .16s ease, box-shadow .16s ease;
+}
+.ap-tabs .ap-tab:hover {
+  color: #f1f3fb;
+  background: #1a2133;
+  border-color: #303a50;
+}
+.ap-tabs .ap-tab.active,
+.ap-tabs .ap-tab[aria-selected="true"] {
+  color: #f5f4ff;
+  background: #1a2133;
+  border-color: #4b477d;
+  box-shadow: inset 0 0 0 1px rgba(129, 117, 255, .08), 0 2px 8px rgba(0, 0, 0, .12);
+}
+.ap-tabs .ap-tab:focus-visible {
+  outline: 2px solid #8175ff;
+  outline-offset: 2px;
+}
+
+/* Use the same navy palette throughout the Update form, without oversized text. */
+#update-applicant-form {
+  color: #dce2ef;
+  font-size: 12px;
+}
+#update-applicant-form .ap-section {
+  margin-bottom: 12px;
+  padding: 14px;
+  border-color: #293246;
+  border-radius: 11px;
+  background: #111827;
+}
+#update-applicant-form .ap-section h3 { font-size: 12px; }
+#update-applicant-form .ap-section-head { margin-bottom: 11px; }
+#update-applicant-form .ap-step-label { font-size: 10px; }
+#update-applicant-form .ap-checklist { gap: 7px; margin-top: 11px; }
+#update-applicant-form .ap-check {
+  gap: 8px;
+  padding: 9px 10px;
+  border-color: #2c3549;
+  border-radius: 9px;
+  background: #1a2133;
+  font-size: 11px;
+}
+#update-applicant-form .ap-check:hover { background: #202a40; }
+#update-applicant-form .ap-record { background: #151c2b; }
+#update-applicant-form .ap-details summary { font-size: 12px; }
+#update-applicant-form .form-grid { gap: 12px; }
+#update-applicant-form input,
+#update-applicant-form select,
+#update-applicant-form textarea {
+  box-sizing: border-box;
+  max-width: 100%;
+  min-height: 36px;
+  padding: 8px 10px;
+  border: 1px solid #2c3549;
+  border-radius: 8px;
+  background: #0d1421;
+  color: #e7ebf5;
+  font-size: 12px;
+}
+#update-applicant-form textarea { min-height: 76px; resize: vertical; }
+#update-applicant-form input:focus,
+#update-applicant-form select:focus,
+#update-applicant-form textarea:focus {
+  outline: none;
+  border-color: #7468ed;
+  box-shadow: 0 0 0 3px rgba(129, 117, 255, .1);
+}
+
+/* Modal implementations vary by project; these :has selectors target only the
+   modal that contains the Update Applicant form. */
+body:has(#update-applicant-form) .modal,
+body:has(#update-applicant-form) .modal-dialog,
+body:has(#update-applicant-form) .modal-content,
+body:has(#update-applicant-form) .modal-card,
+body:has(#update-applicant-form) [role="dialog"]:has(#update-applicant-form) {
+  width: min(900px, calc(100vw - 40px));
+  max-width: calc(100vw - 40px);
+  border-radius: 5px;
+}
+body:has(#update-applicant-form) .modal-content,
+body:has(#update-applicant-form) .modal-card {
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+}
+/* Avoid globally enlarging all modal titles; only the Update title is emphasized. */
+body:has(#update-applicant-form) .modal h2,
+body:has(#update-applicant-form) .modal-title,
+body:has(#update-applicant-form) .modal-header h2,
+body:has(#update-applicant-form) .modal-card h2 {
+  font-size: 17px;
+  line-height: 1.35;
+}
+
+@media (max-width: 720px) {
+  .ap-tabs { width: 100%; }
+  .ap-tabs .ap-tab { padding: 8px 11px; font-size: 11px; }
+  body:has(#update-applicant-form) .modal,
+  body:has(#update-applicant-form) .modal-dialog,
+  body:has(#update-applicant-form) .modal-content,
+  body:has(#update-applicant-form) .modal-card,
+  body:has(#update-applicant-form) [role="dialog"]:has(#update-applicant-form) {
+    width: calc(100vw - 20px);
+    max-width: calc(100vw - 20px);
+  }
+  body:has(#update-applicant-form) .modal-content,
+  body:has(#update-applicant-form) .modal-card { max-height: calc(100dvh - 20px); }
+  #update-applicant-form .ap-section { padding: 11px; }
+  #update-applicant-form .ap-checklist { grid-template-columns: 1fr; }
+}
+
+/* Compact status preview: progress summary for every applicant status. */
+.ap-progress-popover {
+  padding: 13px 14px 12px;
+  background: #111827;
+  border-color: #343e55;
+}
+.ap-progress-popover .ap-hover-title { margin-bottom: 12px; }
+.ap-status-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 7px;
+  border: 1px solid #353e57;
+  border-radius: 6px;
+  background: #1a2133;
+  color: #c5c9ff !important;
+  font-size: 10px !important;
+}
+.ap-summary-row { margin: 10px 0 0; }
+.ap-summary-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+  color: #cbd3e4;
+  font-size: 11px;
+  line-height: 1.3;
+}
+.ap-summary-label strong {
+  flex: 0 0 auto;
+  color: #f0f2ff;
+  font-size: 10px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.ap-summary-track {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #252d40;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.22);
+}
+.ap-summary-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #6559e8, #8a7dff);
+  transition: width .2s ease;
+}
+.ap-hover-footnote { margin: 10px 0 0; color: #8995ad; font-size: 10px; line-height: 1.4; }
+
+/* Rejected action is styled as a deliberate secondary/destructive action. */
+#update-applicant-form .ap-reject {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 32px;
+  margin-top: 10px;
+  padding: 7px 11px;
+  border: 1px solid rgba(248, 113, 123, .32);
+  border-radius: 8px;
+  background: rgba(127, 29, 45, .16);
+  color: #ff9ca3;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+#update-applicant-form .ap-reject:hover {
+  background: rgba(127, 29, 45, .28);
+  border-color: rgba(248, 113, 123, .58);
+}
+#update-applicant-form .ap-reject:active { transform: translateY(1px); }
+.ap-reject-mark {
+  display: inline-grid;
+  width: 17px;
+  height: 17px;
+  place-items: center;
+  border-radius: 5px;
+  background: rgba(248, 113, 123, .13);
+  font-size: 15px;
+  line-height: 1;
+}
+
+/* Keep the Update dialog clear of the page header and keep its footer visible.
+   The form itself scrolls rather than forcing the entire modal past the viewport. */
+body:has(#update-applicant-form) [role="dialog"]:has(#update-applicant-form),
+body:has(#update-applicant-form) .modal,
+body:has(#update-applicant-form) .modal-dialog,
+body:has(#update-applicant-form) .modal-content,
+body:has(#update-applicant-form) .modal-card {
+  max-height: 78vh !important;
+}
+body:has(#update-applicant-form) .modal-content,
+body:has(#update-applicant-form) .modal-card,
+body:has(#update-applicant-form) [role="dialog"]:has(#update-applicant-form) {
+  box-sizing: border-box;
+}
+body:has(#update-applicant-form) #update-applicant-form {
+  max-height: 57vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 5px;
+  scrollbar-width: thin;
+  scrollbar-color: #39435b transparent;
+}
+body:has(#update-applicant-form) #update-applicant-form::-webkit-scrollbar { width: 7px; }
+body:has(#update-applicant-form) #update-applicant-form::-webkit-scrollbar-thumb { background: #39435b; border-radius: 99px; }
+body:has(#update-applicant-form) #update-applicant-form .ap-section { padding: 12px; margin-bottom: 10px; }
+body:has(#update-applicant-form) #update-applicant-form .ap-step-label { font-size: 9px; line-height: 1.25; }
+body:has(#update-applicant-form) #update-applicant-form .ap-node { width: 23px; height: 23px; }
+body:has(#update-applicant-form) #update-applicant-form .ap-step:not(:last-child)::after { top: 11px; }
+
+@media (max-width: 720px) {
+  body:has(#update-applicant-form) #update-applicant-form { max-height: 55vh; }
+  .ap-progress-popover { padding: 11px 12px; }
+  .ap-summary-label { font-size: 10px; }
+}
+
+
+/* ==========================================================================
+   Accomplishment record dialog ("Date marked" / "Marked by")
+   Overrides the old .ap-subform look.
+   ========================================================================== */
+.ap-subform.ap-record-card {
+  position: relative;
+  width: min(100%, 440px);
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #2a3550;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #131b2e 0%, #0f1626 100%);
+  color: #e7ebf5;
+  box-shadow: 0 24px 64px rgba(2, 6, 18, .6), 0 0 0 1px rgba(129, 117, 255, .05);
+}
+.ap-record-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: linear-gradient(90deg, #5b6cff, #8175ff 55%, #3b82f6);
+  opacity: .9;
+}
+.ap-rec-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 22px 16px;
+  border-bottom: 1px dashed #2a3550;
+}
+.ap-rec-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(129, 117, 255, .28);
+  background: rgba(129, 117, 255, .12);
+  color: #aeb6ff;
+  font-size: 15px;
+}
+.ap-rec-heading { flex: 1; min-width: 0; }
+.ap-rec-kicker {
+  display: block;
+  color: #8f9bbd;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.ap-record-card .ap-rec-heading h3 {
+  margin: 3px 0 0;
+  color: #f1f3fb;
+  font-size: 15px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.ap-rec-status {
+  flex: none;
+  padding: 4px 9px;
+  border: 1px solid #34405c;
+  border-radius: 999px;
+  background: #1a2336;
+  color: #a9b3cc;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+.ap-rec-status.is-done {
+  border-color: rgba(37, 199, 122, .4);
+  background: rgba(37, 199, 122, .1);
+  color: #45d991;
+}
+.ap-rec-ledger { margin: 0; padding: 6px 22px; }
+.ap-rec-row {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px dotted #26314a;
+}
+.ap-rec-row:last-child { border-bottom: 0; }
+.ap-rec-row dt,
+.ap-rec-row dt label {
+  margin: 0;
+  color: #8f9bbd;
+  font-size: 11px;
+  font-weight: 600;
+}
+.ap-rec-row dd {
+  margin: 0;
+  min-width: 0;
+  color: #edf0fa;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.ap-rec-row input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 34px;
+  padding: 6px 0;
+  border: 0;
+  border-bottom: 1px solid #34405c;
+  border-radius: 0;
+  outline: none;
+  background: transparent;
+  color: #edf0fa;
+  color-scheme: dark;
+  font: inherit;
+  font-size: 13px;
+}
+.ap-rec-row input:focus {
+  border-bottom-color: #8175ff;
+  box-shadow: 0 1px 0 0 #8175ff;
+}
+.ap-rec-signed {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+.ap-rec-signed svg { flex: none; color: #45d991; }
+.ap-rec-note {
+  margin: 0;
+  padding: 4px 22px 16px;
+  color: #7f8aa8;
+  font-size: 10.5px;
+  line-height: 1.5;
+}
+.ap-record-card .ap-subform-actions {
+  margin: 0;
+  padding: 14px 22px;
+  border-top: 1px dashed #2a3550;
+  background: rgba(8, 12, 22, .45);
+}
+@media (max-width: 480px) {
+  .ap-rec-head { padding: 16px 16px 14px; }
+  .ap-rec-ledger { padding: 4px 16px; }
+  .ap-rec-row { grid-template-columns: 1fr; gap: 4px; }
+  .ap-rec-note { padding: 4px 16px 14px; }
+  .ap-record-card .ap-subform-actions { padding: 12px 16px; flex-wrap: wrap; }
+}
+
+
+/* ==========================================================================
+   Applicant pipeline table: readable fonts
+   Target: rows with data-applicant-id (Pipeline + Archived tabs only,
+   the Active franchisees table is not affected).
+   Status (5th) and Update (6th) columns are intentionally NOT touched.
+   !important + long selectors so global table styles cannot shrink these.
+   ========================================================================== */
+.data-panel .table-wrap table tbody tr[data-applicant-id] td {
+  vertical-align: middle !important;
+  padding-top: 14px !important;
+  padding-bottom: 14px !important;
+}
+
+/* APPLICANT: name + Applicant ID */
+.data-panel .table-wrap table tbody tr[data-applicant-id] td:nth-child(1) strong {
+  font-size: 1.025rem !important;   /* 18px */
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+}
+.data-panel .table-wrap table tbody tr[data-applicant-id] td:nth-child(1) small {
+  font-size: 0.9375rem !important;  /* 15px */
+  font-weight: 700 !important;
+  margin-top: 3px !important;
+}
+
+/* CONTACT: email + phone */
+.data-panel .table-wrap table tbody tr[data-applicant-id] td:nth-child(2) {
+  font-size: 0.825rem !important;  /* 17px */
+  font-weight: 400 !important;
+  line-height: 1.35 !important;
+}
+.data-panel .table-wrap table tbody tr[data-applicant-id] td:nth-child(2) small {
+  font-size: 0.4375rem !important;  /* 15px */
+  font-weight: 500 !important;
+  margin-top: 3px !important;
+}
+
+/* CONCEPT / BRAND */
+.data-panel .table-wrap table tbody tr[data-applicant-id] td:nth-child(3) {
+  font-size: 1.000rem !important;   /* 18px */
+  font-weight: 350 !important;
+}
+
+/* APPLIED (date) */
+.data-panel .table-wrap table tbody tr[data-applicant-id] td:nth-child(4) {
+  font-size: 0.825rem !important;  /* 17px */
+  font-weight: 450 !important;
+}
+
+/* Slightly smaller on phones so rows don't get too tall */
+@media (max-width: 720px) {
+  .data-panel .table-wrap table tbody tr[data-applicant-id] td:nth-child(1) strong { font-size: 1rem !important; }       /* 16px */
+  .data-panel .table-wrap table tbody tr[data-applicant-id] td:nth-child(2),
+  .data-panel .table-wrap table tbody tr[data-applicant-id] td:nth-child(3),
+  .data-panel .table-wrap table tbody tr[data-applicant-id] td:nth-child(4) { font-size: 0.9375rem !important; }          /* 15px */
+  .data-panel .table-wrap table tbody tr[data-applicant-id] td:nth-child(1) small,
+  .data-panel .table-wrap table tbody tr[data-applicant-id] td:nth-child(2) small { font-size: 0.8125rem !important; }    /* 13px */
+}
+
+
+/* ==========================================================================
+   READ panel: clickable pipeline rows
+   Only applicants that reached the "Scheduled" stage (or later) get the
+   .ap-row-readable class from Applicants.jsx, so earlier stages stay
+   non-clickable. The slide-in panel itself is styled in
+   ApplicantScheduleDrawer.css.
+   ========================================================================== */
+.data-panel .table-wrap table tbody tr.ap-row-readable {
+  cursor: pointer;
+  transition: background .15s ease;
+}
+.data-panel .table-wrap table tbody tr.ap-row-readable:hover {
+  background: rgba(123, 136, 255, .06);
+}
+.data-panel .table-wrap table tbody tr.ap-row-readable.is-selected {
+  background: rgba(123, 136, 255, .12);
+}
+/* Buttons keep their own cursor; the status badge keeps the "help" cursor for its hover card. */
+.data-panel .table-wrap table tbody tr.ap-row-readable button { cursor: pointer; }
+
+
+
+/* ==========================================================================
+   READ panel (slide-in): Activities & schedules of the selected applicant
+   Used by ApplicantScheduleDrawer.jsx (rendered in a portal on <body>).
+   Every class uses the "asd-" prefix, so nothing here clashes with the rules above.
+   ========================================================================== */
+
+/* ---------- Drawer shell ---------- */
+
+.asd-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: min(440px, 100vw);
+  height: 100vh;
+  height: 100dvh;
+  border-left: 1px solid #1a2133;
+  background: #0a0f1b;
+  color: #e7ebf5;
+  box-shadow: -18px 0 48px rgba(0, 0, 0, 0.45);
+  transform: translateX(100%);
+  visibility: hidden;
+  transition: transform 0.28s ease, visibility 0s linear 0.28s;
+}
+
+.asd-drawer.is-open {
+  transform: translateX(0);
+  visibility: visible;
+  transition: transform 0.28s ease, visibility 0s;
+}
+
+/* Close button sits just outside the panel's left edge (like the Activities panel) */
+.asd-close {
+  position: absolute;
+  top: 28px;
+  left: -50px;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid #1f2940;
+  border-radius: 8px;
+  background: #0d1424;
+  color: #aab4c8;
+  font-size: 15px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.asd-close:hover {
+  color: #fff;
+  border-color: #3a4666;
+}
+
+.asd-close:focus-visible {
+  outline: 2px solid #8175ff;
+  outline-offset: 2px;
+}
+
+/* ---------- Header ---------- */
+
+.asd-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 26px 24px 22px;
+  border-bottom: 1px solid #141b2c;
+}
+
+.asd-avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border: 1px solid #3a3f78;
+  border-radius: 50%;
+  background: #1a1f45;
+  color: #c5c9ff;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.asd-head h2 {
+  margin: 0;
+  color: #fff;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.asd-head p {
+  margin: 4px 0 0;
+  color: #8590a8;
+  font-size: 14px;
+}
+
+/* ---------- Body ---------- */
+
+.asd-body {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 6px 24px 32px;
+  scrollbar-width: thin;
+  scrollbar-color: #2a3350 transparent;
+}
+
+.asd-section {
+  padding: 20px 0;
+  border-bottom: 1px solid #141b2c;
+}
+
+.asd-section:last-child {
+  border-bottom: 0;
+}
+
+.asd-section h3 {
+  margin: 0 0 14px;
+  color: #8a94ab;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Progress bar */
+
+.asd-bar-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  color: #aab4c8;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.asd-bar {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #151c2e;
+}
+
+.asd-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #5b6cff, #8a7dff);
+  transition: width 0.35s ease;
+}
+
+.asd-bar span.is-complete {
+  background: linear-gradient(90deg, #1fb36c, #34d399);
+}
+
+/* Milestone list */
+
+.asd-progress-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.asd-progress-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.asd-progress-list li > span:last-child {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.asd-progress-list strong {
+  color: #fff;
+  font-size: 17px;
+  font-weight: 650;
+}
+
+.asd-progress-list small {
+  color: #8590a8;
+  font-size: 14px;
+}
+
+.asd-progress-list li.is-done strong {
+  color: #22c55e;
+}
+
+.asd-progress-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid #1f2940;
+  border-radius: 50%;
+  background: #0d1424;
+  color: #aab4c8;
+  font-size: 13px;
+}
+
+.asd-progress-list li.is-done .asd-progress-icon {
+  border-color: rgba(34, 197, 94, 0.4);
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+/* Activity cards */
+
+.asd-activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.asd-activity-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid #1a2133;
+  border-radius: 8px;
+  background: #0c1220;
+}
+
+.asd-activity-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.asd-activity-top strong {
+  color: #fff;
+  font-size: 17px;
+  font-weight: 650;
+}
+
+.asd-activity-list small {
+  color: #8590a8;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.asd-activity-list p {
+  margin: 2px 0 0;
+  color: #8590a8;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+/* Attendees */
+
+.asd-attendees {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #e7ebf5;
+  font-size: 15px;
+}
+
+.asd-attendees svg {
+  flex: none;
+  margin-top: 3px;
+  color: #8590a8;
+}
+
+/* Empty + error states */
+
+.asd-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 44px 16px;
+  color: #8590a8;
+  font-size: 14px;
+  text-align: center;
+}
+
+.asd-empty svg {
+  margin-bottom: 4px;
+  font-size: 26px;
+}
+
+.asd-empty strong {
+  color: #e7ebf5;
+  font-size: 16px;
+}
+
+.asd-error {
+  margin: 18px 0 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(248, 113, 123, 0.35);
+  border-radius: 8px;
+  background: rgba(127, 29, 45, 0.18);
+  color: #ff9ca3;
+  font-size: 13px;
+}
+
+/* ---------- Mobile: full-width panel, close button moves inside ---------- */
+
+@media (max-width: 560px) {
+  .asd-close {
+    top: 14px;
+    right: 14px;
+    left: auto;
+  }
+
+  .asd-head {
+    padding: 20px 60px 18px 18px;
+  }
+
+  .asd-body {
+    padding: 4px 18px 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .asd-drawer,
+  .asd-drawer.is-open,
+  .asd-bar span {
+    transition: none;
+  }
+}

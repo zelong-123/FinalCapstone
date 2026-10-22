@@ -1,0 +1,24 @@
+HERALD 2.0 PREMIUM XAMPP EDITION - VALIDATION RESULTS
+Date: 2026-07-22
+
+PASS - React ESLint completed without errors.
+PASS - React/Vite production build completed successfully.
+PASS - Production frontend copied to backend/public/app.
+PASS - Built frontend uses /app for router, asset, and favicon paths.
+PASS - Built frontend uses the same-origin /api/v1 Laravel API.
+PASS - Persistent light and dark themes are implemented without initial theme flash.
+PASS - Login success loading transition remains present and has been upgraded.
+PASS - Responsive mobile navigation and backdrop state were corrected.
+PASS - Accessible modal focus trapping, Escape handling, and focus restoration were added.
+PASS - API timeout, cancellation, empty-response, and connection-error handling were added.
+PASS - 91 PHP files passed PHP syntax validation.
+PASS - 70 API route actions map to implemented public controller methods.
+PASS - package.json, package-lock.json, composer.json, and OpenAPI YAML parsed successfully.
+PASS - Production asset references resolve to files in backend/public/app.
+PASS - npm installed 162 packages with zero known vulnerabilities.
+PASS - XAMPP local environment targets MariaDB database herald at 127.0.0.1:3306.
+PASS - No Docker files or Docker directories are present.
+PASS - Unused Vite starter assets and legacy duplicate CSS were removed.
+
+RUNTIME NOTE
+The first execution of SETUP_XAMPP.bat installs Composer dependencies, generates APP_KEY, creates/migrates/seeds the database, and validates Laravel routes. The complete Laravel PHPUnit suite should then be run with RUN_BACKEND_TESTS.bat on the target Windows/XAMPP environment.

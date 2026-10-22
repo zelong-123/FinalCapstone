@@ -1,0 +1,297 @@
+/* ==========================================================
+   SupplyRequest.css
+   Scoped with the "sr-" prefix so it won't clash with your
+   global styles. Colors fall back to a dark theme if your own
+   CSS variables aren't defined — override the --sr-* tokens
+   below to match your app.
+   ========================================================== */
+
+.page-container {
+  --sr-accent: var(--accent, #2f7de1);
+  --sr-accent-soft: rgba(47, 125, 225, 0.18);
+  --sr-text: var(--text, #f4f4f5);
+  --sr-muted: var(--text-muted, #a1a1aa);
+  --sr-border: var(--border, #2e2e33);
+  --sr-border-strong: var(--border-strong, #3f3f46);
+  --sr-surface-hover: var(--surface-hover, rgba(255, 255, 255, 0.04));
+  --sr-danger: var(--danger-text, #f87171);
+  --sr-success: var(--success-text, #4ade80);
+  --sr-todo: #3a3a40;
+}
+
+/* ---------- KPI progress bar ---------- */
+
+.sr-kpi-bar {
+  height: 6px;
+  margin: 10px 0 8px;
+  border-radius: 999px;
+  background: var(--sr-todo);
+  overflow: hidden;
+}
+
+.sr-kpi-bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--sr-accent);
+  transition: width 0.4s ease;
+}
+
+/* ---------- Status filter chips ---------- */
+
+.sr-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 18px 0 14px;
+}
+
+.sr-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border: 1px solid var(--sr-border-strong);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--sr-text);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.sr-chip:hover {
+  background: var(--sr-surface-hover);
+}
+
+.sr-chip.is-active {
+  border-color: var(--sr-accent);
+  background: var(--sr-accent-soft);
+}
+
+.sr-chip-count {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+/* ---------- Table ---------- */
+
+.sr-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.sr-table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--sr-muted);
+  white-space: nowrap;
+}
+
+.sr-table th.sr-th-right {
+  text-align: right;
+}
+
+.sr-table td {
+  padding: 16px 14px;
+  vertical-align: middle;
+  border-top: 1px solid var(--sr-border);
+}
+
+.sr-table tbody tr {
+  transition: opacity 0.15s ease;
+}
+
+.sr-table tbody tr.is-busy {
+  opacity: 0.65;
+}
+
+.sr-req-number,
+.sr-target-date {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--sr-text);
+}
+
+.sr-req-meta,
+.sr-target-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.85rem;
+  color: var(--sr-muted);
+}
+
+.sr-target-sub.is-late {
+  color: var(--sr-danger);
+}
+
+/* ---------- Progress tracker ---------- */
+
+.sr-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 170px;
+}
+
+.sr-track {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sr-track-item {
+  display: flex;
+  align-items: center;
+}
+
+.sr-track-line {
+  display: block;
+  width: 14px;
+  height: 2px;
+  background: var(--sr-todo);
+  transition: background 0.25s ease;
+}
+
+.sr-track-line.is-done {
+  background: var(--sr-accent);
+}
+
+.sr-dot {
+  box-sizing: border-box;
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--sr-todo);
+  background: transparent;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.sr-dot.is-done {
+  border-color: var(--sr-accent);
+  background: var(--sr-accent);
+}
+
+.sr-dot.is-active {
+  width: 16px;
+  height: 16px;
+  border-color: var(--sr-accent);
+  background: transparent;
+}
+
+.sr-progress-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--sr-text);
+}
+
+.sr-progress-label.is-danger {
+  color: var(--sr-danger);
+}
+
+.sr-progress-label.is-final {
+  color: var(--sr-success);
+}
+
+/* ---------- Action buttons ---------- */
+
+.sr-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sr-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid var(--sr-border-strong);
+  background: transparent;
+  color: var(--sr-text);
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.sr-btn:hover:not(:disabled) {
+  background: var(--sr-surface-hover);
+  border-color: var(--sr-muted);
+}
+
+.sr-btn:focus-visible,
+.sr-chip:focus-visible {
+  outline: 2px solid var(--sr-accent);
+  outline-offset: 2px;
+}
+
+.sr-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Primary "next step" button: same outlined look as the reference,
+   with an accent border so it reads as the main action. */
+.sr-btn-primary {
+  border-color: var(--sr-accent);
+  font-weight: 600;
+}
+
+.sr-btn-primary:hover:not(:disabled) {
+  background: var(--sr-accent-soft);
+  border-color: var(--sr-accent);
+}
+
+.sr-btn-ghost {
+  border-color: transparent;
+  color: var(--sr-muted);
+}
+
+.sr-btn-icon {
+  width: 38px;
+  padding: 0;
+}
+
+.sr-no-action {
+  color: var(--sr-muted);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 860px) {
+  .sr-table th,
+  .sr-table td {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .sr-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sr-dot,
+  .sr-track-line,
+  .sr-kpi-bar-fill,
+  .sr-btn,
+  .sr-chip,
+  .sr-table tbody tr {
+    transition: none;
+  }
+}

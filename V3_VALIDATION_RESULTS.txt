@@ -1,0 +1,16 @@
+HERALD V3 RELIABILITY UPDATE - VALIDATION RESULTS
+
+Validated:
+- PHP syntax for all changed controllers, routes, and feature tests.
+- Laravel route registration for GET /api/v1/branches/overview.
+- Laravel route registration for /branch-management.
+- JavaScript syntax for all four branch portals, the branch-management panel, the main-site navigation injector, and the patched production bundle.
+- HTML parsing for Branch 1, Branch 2, Branch 3, Branch 4, and the branch-management panel.
+- Whole-number validation exists in the branch deduction API, supply request API, and inventory adjustment API.
+- Production branch inputs use whole-number controls and do not replace active quantity fields during routine live polling.
+- The prebuilt main application requests warehouse-only records on its Inventory page, while the API ignores that filter for franchise users so they retain access to their own branch inventory.
+- Setup and startup scripts include the branch-management panel.
+
+Environment limitation:
+- Full PHPUnit execution and a local Laravel HTTP server could not run in this validation container because its PHP installation does not include DOM, mbstring, XML, or database drivers. XAMPP 8.2 includes/checks the required extensions during SETUP_XAMPP.bat.
+- A new React production build could not be generated because the package registry returned repeated HTTP 503 errors. The runtime package does not depend on that build for these fixes: the existing production bundle was patched for whole-unit and warehouse filtering, and the new Branches command panel is a prebuilt standalone page linked into the main Herald navigation.

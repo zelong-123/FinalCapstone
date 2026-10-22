@@ -1,0 +1,10 @@
+Herald 3.0 - Branch Reliability and Mobile Update
+Build date: 2026-07-27
+
+Highlights:
+- Stable branch inputs during live synchronization
+- Whole-unit deduction/request controls
+- Confirmation review before stock changes
+- Mobile branch portal
+- Separate Admin/Logistics Branches command panel
+- Warehouse inventory separated from branch inventory

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Herald branch command panel">
+  <title>Herald · Branches</title>
+  <link rel="icon" href="/app/icon.png.png">
+  <link rel="stylesheet" href="/branch-management/branches.css">
+  <script src="/branch-management/branches.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/app"><img src="/app/icon.png.png" alt=""><span><strong>HERALD</strong><small>Branch command panel</small></span></a>
+    <div class="top-actions"><span id="sync-pill" class="sync-pill">Live sync</span><a id="back-link" class="button ghost" href="/app">Back to Herald</a></div>
+  </header>
+
+  <main class="page">
+    <section class="heading">
+      <div><span class="eyebrow">Network operations</span><h1>Branches</h1><p>Branch inventory, deductions, risks, and requests are organized here—separate from the central warehouse inventory.</p></div>
+      <button id="refresh-button" class="button" type="button">Refresh now</button>
+    </section>
+
+    <div id="notice" class="notice" hidden></div>
+    <section id="loading" class="state-card">Loading branch operations…</section>
+    <section id="content" hidden>
+      <div id="metrics" class="metrics"></div>
+      <div id="branch-cards" class="branch-cards" aria-label="Choose a branch"></div>
+      <section id="workspace" class="workspace"></section>
+    </section>
+  </main>
+</body>
+</html>

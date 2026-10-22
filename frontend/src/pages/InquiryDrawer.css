@@ -1,0 +1,798 @@
+/* ---------- Clickable table rows ---------- */
+tr.inquiry-row {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+tr.inquiry-row:hover {
+  background: rgba(123, 136, 255, 0.06);
+}
+tr.inquiry-row:focus-visible {
+  outline: 2px solid #7b88ff;
+  outline-offset: -2px;
+}
+tr.inquiry-row.is-selected {
+  background: rgba(123, 136, 255, 0.1);
+  box-shadow: inset 3px 0 0 #7b88ff;
+}
+
+/* ---------- Inquiries table: readable fonts ---------- */
+/* !important + long selectors so the global table styles cannot shrink these again */
+.data-panel .table-wrap table tbody tr.inquiry-row td {
+  vertical-align: middle !important;
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+}
+
+/* LEAD: name + Lead ID */
+.data-panel .table-wrap table tbody tr.inquiry-row td:nth-child(1) strong {
+  font-size: 1.025rem !important;   /* 18px */
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+}
+.data-panel .table-wrap table tbody tr.inquiry-row td:nth-child(1) small {
+  font-size: 0.9375rem !important;  /* 15px */
+  font-weight: 700 !important;
+  margin-top: 3px !important;
+}
+
+/* CONTACT: email + phone + Viber */
+.data-panel .table-wrap table tbody tr.inquiry-row td:nth-child(2) {
+  font-size: 0.825rem !important;  /* 17px */
+  font-weight: 400 !important;
+  line-height: 1.35 !important;
+}
+.data-panel .table-wrap table tbody tr.inquiry-row td:nth-child(2) small {
+  font-size: 0.4375rem !important;  /* 15px */
+  font-weight: 500 !important;
+  margin-top: 3px !important;
+}
+
+/* CONCEPT */
+.data-panel .table-wrap table tbody tr.inquiry-row td:nth-child(3),
+.data-panel .table-wrap table tbody tr.inquiry-row td:nth-child(3) .brand-text {
+  font-size: 0.725rem !important;   /* 18px */
+  font-weight: 350 !important;
+}
+
+/* SOURCE and DATE */
+.data-panel .table-wrap table tbody tr.inquiry-row td:nth-child(4),
+.data-panel .table-wrap table tbody tr.inquiry-row td:nth-child(5) {
+  font-size: 0.725rem !important;  /* 17px */
+  font-weight: 350 !important;
+}
+
+/* STATUS (column 6): unchanged */
+
+/* ---------- ACTIONS: fixed button positions ---------- */
+.row-actions.fixed-actions {
+  display: grid !important;
+  grid-template-columns: 132px 46px 46px; /* Convert | Edit | Archive */
+  gap: 10px;
+  align-items: center;
+}
+.row-actions.fixed-actions .action-slot {
+  display: flex;
+  min-height: 42px;
+}
+.row-actions.fixed-actions .action-slot button {
+  width: 90%px;
+  height: 32px;
+  justify-content: center;
+  white-space: nowrap;
+  font-size: 0.825rem !important;       /* 16px */
+  font-weight: 500 !important;
+}
+
+/* ---------- Icon-only row action (Archive) ---------- */
+.row-actions .icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+}
+.row-actions .icon-button svg {
+  margin: 0;
+}
+/* Keep the fixed-slot sizes winning over the generic icon-button size above */
+.row-actions.fixed-actions .icon-button {
+  width: 46px;
+  height: 42px;
+}
+
+/* ---------- Edit (pencil) + Archive icon buttons in the table ---------- */
+.row-actions.fixed-actions .icon-button.edit-button,
+.row-actions.fixed-actions .icon-button.archive-icon-button {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+.row-actions .icon-button.edit-button {
+  color: #4c5dcc; /* light yellow */
+}
+.row-actions .icon-button.edit-button:hover {
+  background: rgba(75, 105, 202, 0.1);
+  box-shadow: 0 0 12px rgba(51, 98, 200, 0.35);
+  color: #2c72bc;
+}
+.row-actions .icon-button.archive-icon-button {
+  color: #f87171; /* professional red */
+}
+.row-actions .icon-button.archive-icon-button:hover {
+  background: rgba(248, 113, 113, 0.1);
+  box-shadow: 0 0 12px rgba(248, 113, 113, 0.35);
+  color: #fca5a5;
+}
+.row-actions .icon-button.edit-button:focus-visible,
+.row-actions .icon-button.archive-icon-button:focus-visible {
+  outline: 2px solid #7b88ff;
+  outline-offset: 2px;
+}
+
+/* ---------- Slide-in read panel ---------- */
+.inquiry-drawer {
+  /* Palette: tuned to the Leads & inquiries panel. Change these to re-theme. */
+  --drawer-bg: #0a0e18;
+  --drawer-border: #1a2133;
+  --drawer-text: #e6e9f2;
+  --drawer-muted: #8590a8;
+  --drawer-accent: #7b88ff;
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 90;
+  width: min(440px, 100vw);
+  display: flex;
+  flex-direction: column;
+  background: var(--drawer-bg);
+  color: var(--drawer-text);
+  border-left: 1px solid var(--drawer-border);
+  box-shadow: none;
+  transform: translate3d(100%, 0, 0);
+  visibility: hidden;
+  will-change: transform;
+  transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1), visibility 0s linear 0.5s;
+}
+.inquiry-drawer.open {
+  transform: translate3d(0, 0, 0);
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+/* Curved pointer on the left edge, level with the selected row */
+.drawer-pointer {
+  position: absolute;
+  left: -15px;
+  top: calc(var(--pointer-y, 0px) - 24px);
+  width: 16px;
+  height: 48px;
+  opacity: var(--pointer-opacity, 0);
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.inquiry-drawer.pointer-animate .drawer-pointer {
+  transition: top 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.2s ease;
+}
+.drawer-pointer svg {
+  display: block;
+  overflow: visible;
+}
+.drawer-pointer .pointer-fill {
+  fill: var(--drawer-bg);
+}
+.drawer-pointer .pointer-line {
+  fill: none;
+  stroke: var(--drawer-border);
+  stroke-width: 1;
+}
+
+/* Close button on the left edge, near the top */
+.drawer-toggle {
+  color:#1a2133;
+  position: absolute;
+  top: 24px;
+  left: -17px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 10%;
+  border: 1px solid var(--drawer-border);
+  background: var(--drawer-bg);
+  color: var(--drawer-muted);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.drawer-toggle:hover {
+  color: var(--drawer-text);
+  border-color: var(--drawer-accent);
+}
+.drawer-toggle:focus-visible {
+  outline: 2px solid var(--drawer-accent);
+  outline-offset: 2px;
+}
+
+.drawer-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 28px 28px 22px;
+  border-bottom: 1px solid var(--drawer-border);
+}
+.drawer-head h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  line-height: 1.25;
+}
+.drawer-head p {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  color: var(--drawer-muted);
+}
+.drawer-avatar {
+  flex: none;
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #b4bcff;
+  background: rgba(123, 136, 255, 0.14);
+  border: 1px solid rgba(123, 136, 255, 0.35);
+}
+
+/* Edit button in the panel header (upper-right, beside the name) */
+.drawer-edit-btn {
+  margin-left: auto;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--drawer-border);
+  background: transparent;
+  color: #fde68a;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.drawer-edit-btn:hover {
+  background: rgba(253, 230, 138, 0.08);
+  border-color: rgba(253, 230, 138, 0.4);
+}
+.drawer-edit-btn:focus-visible {
+  outline: 2px solid var(--drawer-accent);
+  outline-offset: 2px;
+}
+
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 28px 32px;
+}
+.drawer-body section {
+  padding: 20px 0 6px;
+}
+.drawer-body section + section {
+  border-top: 1px solid var(--drawer-border);
+}
+.drawer-body h3 {
+  margin: 0 0 14px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--drawer-muted);
+}
+.drawer-body dl {
+  margin: 0;
+}
+.drawer-row {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 12px;
+  padding: 8px 0;
+  font-size: 0.9rem;
+}
+.drawer-row dt {
+  color: var(--drawer-muted);
+}
+.drawer-row dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.drawer-row a {
+  color: #9aa5ff;
+  text-decoration: none;
+}
+.drawer-row a:hover {
+  text-decoration: underline;
+}
+.drawer-empty {
+  color: var(--drawer-muted);
+  opacity: 0.7;
+  font-style: italic;
+}
+.drawer-status {
+  padding-bottom: 14px;
+}
+.drawer-remarks {
+  margin: 0 0 14px;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+/* ---------- Inline edit form inside the panel ---------- */
+.drawer-edit label {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.drawer-edit label > span {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--drawer-muted);
+}
+.drawer-edit input,
+.drawer-edit select,
+.drawer-edit textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+.drawer-edit textarea {
+  resize: vertical;
+}
+.drawer-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 6px 0 14px;
+}
+
+@media (max-width: 520px) {
+  .drawer-pointer {
+    display: none;
+  }
+  .drawer-row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+  .drawer-toggle {
+    left: 10px;
+    top: 10px;
+  }
+  .drawer-head {
+    padding-left: 60px;
+  }
+  .drawer-edit-btn {
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inquiry-drawer,
+  .inquiry-drawer.pointer-animate .drawer-pointer {
+    transition: none;
+  }
+}
+
+/* ---------- Brand text ---------- */
+.brand-text {
+  font-weight: 600;
+}
+
+/* ---------- Existing-contact suggestions (New inquiry form) ---------- */
+.suggest-wrap {
+  position: relative;
+}
+.suggest-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  max-height: 232px;
+  overflow-y: auto;
+  background: #0d1220;
+  border: 1px solid #1f2842;
+  border-radius: 10px;
+}
+.suggest-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.suggest-item.active,
+.suggest-item:hover {
+  background: rgba(123, 136, 255, 0.14);
+}
+.suggest-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.suggest-name em {
+  font-style: normal;
+  font-weight: 400;
+  color: #8590a8;
+}
+.suggest-item small {
+  color: #8590a8;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Duplicate warning (bottom of the New inquiry form) ---------- */
+.duplicate-warning {
+  grid-column: 1 / -1;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  background: rgba(251, 191, 36, 0.08);
+}
+.duplicate-head {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  color: #fbbf24;
+}
+.duplicate-head svg {
+  flex: none;
+  margin-top: 3px;
+}
+.duplicate-head p {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #f4e3b0;
+}
+.duplicate-list {
+  margin: 12px 0 0;
+  padding: 0 0 0 26px;
+  display: grid;
+  gap: 8px;
+  font-size: 0.88rem;
+}
+.duplicate-list small {
+  display: block;
+  color: #8590a8;
+}
+.duplicate-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+/* ---------- Sort control (between search and status filter) ---------- */
+
+.tab {
+  border-radius: 10%;
+  color:#ffffff;
+  background-color: #161d30;
+}
+
+.toolbar > input {
+  min-width: 0; /* lets the search bar shrink to make room for the sort control */
+}
+.toolbar .sort-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+.toolbar .sort-control select {
+  min-width: 130px;
+}
+.toolbar .sort-control .sort-cycle {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+}
+.toolbar .sort-control .sort-cycle svg {
+  margin: 0;
+}
+@media (max-width: 720px) {
+  .toolbar .sort-control {
+    flex: 1 1 100%;
+  }
+  .toolbar .sort-control select {
+    flex: 1;
+  }
+}
+
+.toolbar .sort-control .icon-button {
+  border-radius: 10%;
+  color: #b4bdd4;
+  background-color: #1a2133;
+}
+
+/* ---------- Archive view: multi-select + permanent delete ---------- */
+.archive-hint {
+  margin: 0 0 10px;
+}
+.archive-mode tr.inquiry-row {
+  user-select: none;
+}
+tr.inquiry-row.is-picked {
+  background: rgba(123, 136, 255, 0.14);
+  box-shadow: inset 3px 0 0 #7b88ff;
+}
+.row-actions .selected-tag {
+  font-size: 0.78rem;
+  color: #9aa5ff;
+}
+.purge-list {
+  margin: 14px 0 0;
+  padding: 10px 14px 10px 30px;
+  font-size: 0.88rem;
+  border: 1px solid #1a2133;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+}
+.purge-reason {
+  display: block;
+  margin-top: 14px;
+}
+.purge-reason span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.purge-reason em {
+  font-style: normal;
+  font-weight: 400;
+  color: #8590a8;
+}
+.purge-reason textarea {
+  width: 100%;
+  min-height: 92px;
+  resize: vertical;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  color: inherit;
+  font: inherit;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #1f2842;
+  border-radius: 10px;
+}
+.purge-reason textarea:focus {
+  outline: 2px solid rgba(123, 136, 255, 0.5);
+  outline-offset: 1px;
+}
+
+/* ---------- Admin settings: selectable archived inquiries ---------- */
+.archive-selectable .archive-item {
+  cursor: pointer;
+  user-select: none;
+}
+.archive-item.is-picked {
+  background: rgba(123, 136, 255, 0.14);
+  box-shadow: inset 3px 0 0 #7b88ff;
+}
+
+/* ---------- Pagination (bottom of the Leads & inquiries table) ---------- */
+.inquiry-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 18px;
+  border-top: 1px solid #1a2133;
+}
+.inquiry-pagination .page-count {
+  font-size: 0.88rem;
+  color: #8590a8;
+}
+.inquiry-pagination .page-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto; /* keeps the controls at the bottom-right */
+}
+.inquiry-pagination button {
+  height: 36px;
+  border: 1px solid #1f2842;
+  background: transparent;
+  color: #b4bdd4;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.inquiry-pagination .page-step {
+  padding: 0 14px;
+  border-radius: 10px;
+}
+.inquiry-pagination .page-number {
+  width: 36px;
+  padding: 0;
+  border-color: transparent;
+  border-radius: 50%; /* circular active-page indicator */
+  font-weight: 600;
+}
+.inquiry-pagination .page-number:hover:not(.active),
+.inquiry-pagination .page-step:hover:not(:disabled) {
+  background: rgba(123, 136, 255, 0.1);
+  border-color: rgba(123, 136, 255, 0.35);
+  color: #e6e9f2;
+}
+.inquiry-pagination .page-number.active {
+  background: #7b88ff; /* same violet accent used across this page */
+  border-color: #7b88ff;
+  color: #ffffff;
+}
+.inquiry-pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.inquiry-pagination button:focus-visible {
+  outline: 2px solid #7b88ff;
+  outline-offset: 2px;
+}
+@media (max-width: 520px) {
+  .inquiry-pagination {
+    justify-content: center;
+  }
+  .inquiry-pagination .page-nav {
+    margin-left: 0;
+  }
+}
+
+/* ---------- Inline edit form inside the panel ----------
+   Replaces the old "Inline edit form inside the panel" block.
+   Long selectors on purpose: global input/label/button rules can no longer win. */
+
+.inquiry-drawer .drawer-body section.drawer-edit {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 14px;
+  row-gap: 16px;
+  padding: 20px 0 18px;
+}
+
+/* Title, error notice and action row always use the full width */
+.inquiry-drawer .drawer-body section.drawer-edit > h3,
+.inquiry-drawer .drawer-body section.drawer-edit > div {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+/* Every field: label on top, control below */
+.inquiry-drawer .drawer-body section.drawer-edit > label {
+  display: grid;
+  grid-column: 1 / -1;
+  align-content: start;
+  gap: 7px;
+  min-width: 0;
+  margin: 0;
+}
+
+/* First name | Last name   and   Contact number | Email sit side by side */
+.inquiry-drawer .drawer-body section.drawer-edit > label:nth-of-type(-n + 4) {
+  grid-column: span 1;
+}
+
+.inquiry-drawer .drawer-body section.drawer-edit > label > span {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  color: var(--drawer-muted, #8590a8);
+}
+
+/* Inputs, select, textarea */
+.inquiry-drawer .drawer-body section.drawer-edit input,
+.inquiry-drawer .drawer-body section.drawer-edit select,
+.inquiry-drawer .drawer-body section.drawer-edit textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 1px solid var(--drawer-border, #1a2133);
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.03);
+  color: var(--drawer-text, #e6e9f2);
+  font: inherit;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  color-scheme: dark;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.inquiry-drawer .drawer-body section.drawer-edit select {
+  cursor: pointer;
+}
+
+.inquiry-drawer .drawer-body section.drawer-edit textarea {
+  min-height: 104px;
+  resize: vertical;
+}
+
+.inquiry-drawer .drawer-body section.drawer-edit input::placeholder,
+.inquiry-drawer .drawer-body section.drawer-edit textarea::placeholder {
+  color: var(--drawer-muted, #8590a8);
+  opacity: 0.7;
+}
+
+.inquiry-drawer .drawer-body section.drawer-edit input:hover,
+.inquiry-drawer .drawer-body section.drawer-edit select:hover,
+.inquiry-drawer .drawer-body section.drawer-edit textarea:hover {
+  border-color: rgba(123, 136, 255, 0.45);
+}
+
+.inquiry-drawer .drawer-body section.drawer-edit input:focus,
+.inquiry-drawer .drawer-body section.drawer-edit select:focus,
+.inquiry-drawer .drawer-body section.drawer-edit textarea:focus {
+  outline: none;
+  border-color: var(--drawer-accent, #7b88ff);
+  box-shadow: 0 0 0 3px rgba(123, 136, 255, 0.22);
+  background-color: rgba(123, 136, 255, 0.05);
+}
+
+/* Cancel / Save changes */
+.inquiry-drawer .drawer-body section.drawer-edit .drawer-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--drawer-border, #1a2133);
+}
+
+.inquiry-drawer .drawer-body section.drawer-edit .drawer-edit-actions button {
+  min-height: 40px;
+  padding: 0 18px;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.inquiry-drawer .drawer-body section.drawer-edit .drawer-edit-actions button:not(.primary-button) {
+  border: 1px solid var(--drawer-border, #1a2133);
+  background: transparent;
+  color: var(--drawer-muted, #b4bdd4);
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.inquiry-drawer .drawer-body section.drawer-edit .drawer-edit-actions button:not(.primary-button):hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(123, 136, 255, 0.45);
+  color: var(--drawer-text, #e6e9f2);
+}
+
+.inquiry-drawer .drawer-body section.drawer-edit .drawer-edit-actions button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.inquiry-drawer .drawer-body section.drawer-edit .drawer-edit-actions button:focus-visible {
+  outline: 2px solid var(--drawer-accent, #7b88ff);
+  outline-offset: 2px;
+}
+
+/* Narrow screens: one column */
+@media (max-width: 520px) {
+  .inquiry-drawer .drawer-body section.drawer-edit > label:nth-of-type(-n + 4) {
+    grid-column: 1 / -1;
+  }
+}

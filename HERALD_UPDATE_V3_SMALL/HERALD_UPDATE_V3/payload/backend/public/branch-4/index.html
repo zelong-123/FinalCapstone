@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Herald branch inventory deduction and stock request portal">
+  <title>Herald Branch 4 · Pasig</title>
+  <link rel="icon" href="/branch-assets/herald-logo.png">
+  <link rel="stylesheet" href="/branch-assets/branch.css">
+  <script src="/branch-assets/branch.js" defer></script>
+</head>
+<body data-branch-code="branch-4" data-branch-name="Herald Branch 4 · Pasig" data-branch-email="branch4@herald.local">
+  <section id="login-view" class="login-shell">
+    <div class="login-card">
+      <div class="brand-lockup"><img src="/branch-assets/herald-logo.png" alt="Herald logo"><div><h1>Herald Branch Portal</h1><p id="branch-login-label"></p></div></div>
+      <div class="login-copy"><h2>Sign in to this branch</h2><p>Sales and usage entered here deduct stock from the shared Herald database automatically.</p></div>
+      <form id="login-form" class="form-stack">
+        <label>Email<input id="login-email" type="email" autocomplete="username" required></label>
+        <label>Password<input id="login-password" type="password" autocomplete="current-password" required></label>
+        <label style="display:flex;grid-template-columns:auto 1fr;align-items:center;font-weight:500"><input id="keep-signed-in" type="checkbox" style="width:auto"> Keep this branch signed in</label>
+        <p id="login-error" class="form-error" role="alert"></p>
+        <button class="primary" type="submit">Open branch system</button>
+      </form>
+      <p class="login-hint">Branch code: <strong id="branch-login-code"></strong>. Use only the account assigned to this branch. Change the default password before live operation.</p>
+    </div>
+  </section>
+
+  <div id="portal-view" class="portal" hidden>
+    <header class="topbar">
+      <div class="brand-lockup"><img src="/branch-assets/herald-logo.png" alt="Herald logo"><div><h1 id="location-name">Herald Branch 4 · Pasig</h1><p id="location-address"></p></div></div>
+      <div class="top-actions"><div id="sync-pill" class="sync-pill"><span id="sync-label">Live sync</span></div><button id="logout-button" class="ghost" type="button">Sign out</button></div>
+    </header>
+
+    <main class="content">
+      <section class="hero"><div><h2>Branch stock control</h2><p>Record sold or consumed items, watch balances update across all connected laptops, and send restock requests directly to the main Herald site.</p></div><div class="operator-card"><span>Signed in operator</span><strong id="operator-name"></strong><small id="last-sync"></small></div></section>
+
+      <section class="metrics" aria-label="Inventory summary">
+        <article class="metric"><span>Products</span><strong id="metric-products">0</strong></article>
+        <article class="metric"><span>Total units</span><strong id="metric-units">0</strong></article>
+        <article class="metric"><span>Low stock</span><strong id="metric-low">0</strong></article>
+        <article class="metric"><span>Critical stock</span><strong id="metric-critical">0</strong></article>
+      </section>
+
+      <div class="grid">
+        <div>
+          <form id="sale-form" class="panel">
+            <div class="panel-header"><div class="section-heading"><h3>Deduct sold or consumed stock</h3><p>Use the − and + controls to enter whole units. Every deduction is reviewed before it changes the shared stock.</p></div><button id="refresh-button" class="secondary" type="button">Refresh now</button></div>
+            <div class="table-wrap"><table><thead><tr><th>Product</th><th>On hand</th><th>Reorder</th><th>Status</th><th>Updated</th><th>Deduct</th></tr></thead><tbody id="inventory-body"></tbody></table></div>
+            <div class="panel-body"><label>Transaction note (optional)<textarea id="sale-notes" placeholder="Receipt number, shift, reason, or reference"></textarea></label></div>
+            <div class="panel-footer"><button id="clear-sale-button" class="ghost" type="button">Clear</button><button class="primary" type="submit">Record deduction</button></div>
+          </form>
+
+          <section class="panel"><div class="panel-header"><div class="section-heading"><h3>Recent deductions</h3><p>Every transaction is retained in Herald for audit and reconciliation.</p></div></div><div id="sales-list" class="panel-body history-list"></div></section>
+        </div>
+
+        <aside>
+          <form id="request-form" class="panel request-form">
+            <div class="panel-header"><div class="section-heading"><h3>Request additional stock</h3><p>Use whole units only. The main Herald site receives the request immediately after confirmation.</p></div></div>
+            <div class="panel-body request-form"><div id="request-lines" class="request-lines"></div><div class="form-row"><label>Target delivery date<input id="request-date" type="date"></label><label>Remarks<textarea id="request-notes" placeholder="Urgency or delivery instructions"></textarea></label></div></div>
+            <div class="panel-footer"><button class="primary" type="submit">Submit stock request</button></div>
+          </form>
+
+          <section class="panel"><div class="panel-header"><div class="section-heading"><h3>Request status</h3><p>Statuses are synchronized from the main Herald workflow.</p></div></div><div id="requests-list" class="panel-body history-list"></div></section>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <div id="confirm-modal" class="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title" hidden>
+    <div class="confirm-card">
+      <div class="confirm-copy">
+        <h3 id="confirm-title">Confirm action</h3>
+        <p id="confirm-message"></p>
+        <ul id="confirm-lines" class="confirm-lines"></ul>
+      </div>
+      <div class="confirm-actions">
+        <button id="confirm-cancel" class="ghost" type="button">Go back</button>
+        <button id="confirm-accept" class="primary" type="button">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="loading-overlay" class="loading-overlay" hidden><div class="loader-card">Synchronizing with Herald…</div></div>
+</body>
+</html>

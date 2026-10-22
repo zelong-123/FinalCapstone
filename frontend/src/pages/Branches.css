@@ -1,0 +1,392 @@
+
+/* =====================================================
+   Branches page
+   Theme tokens: tweak these 5 lines to match your system
+   ===================================================== */
+.branches-page {
+  --bp-surface: #0d111b;      /* big panels (list + info) */
+  --bp-surface-2: #121623;    /* inner blocks */
+  --bp-card: #11141f;         /* branch card background */
+  --bp-border: rgba(255, 255, 255, 0.07);
+  --bp-accent: #7c8cff;       /* selected ring / sort highlight */
+  --bp-gap: 16px;
+  --bp-ease: cubic-bezier(0.22, 0.8, 0.24, 1);
+  --bp-speed: 0.45s;
+}
+
+/* =====================================================
+   Split layout (list | info) – info slides in/out
+   ===================================================== */
+.branches-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0fr);
+  column-gap: 0;
+  height: calc(100dvh - 320px);
+  min-height: 540px;
+  margin-top: 16px;
+  transition:
+    grid-template-columns var(--bp-speed) var(--bp-ease),
+    column-gap var(--bp-speed) var(--bp-ease);
+}
+.branches-layout.has-panel {
+  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+  column-gap: var(--bp-gap);
+}
+
+.branches-list-panel,
+.branch-detail-panel {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+}
+
+/* =====================================================
+   Left: list panel
+   ===================================================== */
+.branches-list-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--bp-surface);
+  border: 1px solid var(--bp-border);
+  border-radius: 20px;
+  overflow: hidden;
+}
+.branches-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px 8px;
+}
+.branches-list-head h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+.branches-list-actions { display: flex; gap: 8px; }
+.branches-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: transparent;
+  color: #9aa4b8;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.branches-pill-btn:hover { color: #fff; border-color: var(--bp-accent); }
+.branches-pill-btn.is-on {
+  color: #fff;
+  border-color: var(--bp-accent);
+  background: rgba(124, 140, 255, 0.18);
+}
+
+/*
+  Never more than 4 cards per row:
+  each column is at least 230px AND at least a quarter of the width.
+*/
+.branches-grid {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 12px 20px 20px;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(max(230px, calc((100% - 3 * var(--bp-gap)) / 4)), 1fr)
+  );
+  grid-auto-rows: max-content;   /* rows size to the card, they never squash it */
+  gap: var(--bp-gap);
+  align-content: start;
+}
+
+/* =====================================================
+   Branch card (all sizes in cqw = % of card width)
+   ===================================================== */
+.branch-card-cell {
+  container-type: inline-size;
+  min-width: 0;
+}
+.branch-card {
+  display: block;
+  width: 100%;
+  padding: 0 0 5cqw;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  background: var(--bp-card);
+  border: 1px solid var(--bp-border);
+  border-radius: 8cqw;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.2s var(--bp-ease), box-shadow 0.2s, border-color 0.2s;
+}
+.branch-card:hover { transform: translateY(-3px); border-color: rgba(255, 255, 255, 0.18); }
+.branch-card:focus-visible { outline: 2px solid var(--bp-accent); outline-offset: 2px; }
+.branch-card.is-active {
+  border-color: var(--bp-accent);
+  box-shadow: 0 0 0 2px var(--bp-accent), 0 10px 28px rgba(124, 140, 255, 0.18);
+}
+.branch-card > span { display: block; }
+
+/* ---- banner ---- */
+.branch-card__banner {
+  position: relative;
+  height: 24cqw;
+  margin: 3cqw 3cqw 0;
+}
+/* colored top bar */
+.branch-card__bar {
+  position: absolute;
+  inset: 0;
+  background: var(--brand-color);
+  border-radius: 6cqw 6cqw 0 0;
+}
+/* dark dome that creates the soft cut under the status */
+.branch-card__notch {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  bottom: 0;
+  width: 50cqw;
+  height: 9cqw;
+  background: var(--bp-card);
+  border-radius: 0 18cqw 0 0 / 0 11cqw 0 0;
+}
+/* logo block (right side) */
+.branch-card__logo-block {
+  position: absolute !important;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  width: 38cqw;
+  height: 36cqw;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 3cqw;
+  background: var(--brand-color);
+  border-radius: 0 6cqw 0 0;
+}
+.branch-card__logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}
+.branch-card__logo-fallback {
+  color: #fff;
+  font-weight: 800;
+  font-size: clamp(10px, 5cqw, 16px);
+  text-align: center;
+  line-height: 1.1;
+}
+
+/* ---- status badge (solid, inside colored banner) ---- */
+.branch-card__status {
+  position: absolute !important;
+  z-index: 3;
+  top: 7.0cqw;
+  left: 4.5cqw;
+  white-space: nowrap;
+}
+
+/* force solid background – no transparency */
+.branch-card__status .status-badge,
+.branch-card__status [class*="status"],
+.branch-card__status [class*="badge"] {
+  background: rgba(0, 0, 0, 0.55) !important;
+  border: none !important;
+  backdrop-filter: none !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
+  padding: 1.8cqw 4.5cqw !important;
+  border-radius: 999px !important;
+  font-size: clamp(10px, 3.8cqw, 13px) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em;
+  color: #fff !important;
+}
+
+/* hide the old branch-code completely */
+.branch-card__code {
+  display: none !important;
+}
+
+/* ---- body ---- */
+.branch-card__body {
+  padding: 3.5cqw 5cqw 0;
+}
+.branch-card__name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-width: 53cqw;
+  font-size: clamp(12px, 5cqw, 16px);
+  line-height: 1.25;
+}
+.branch-card__address {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-width: 53cqw;
+  margin-top: 1cqw;
+  color: #7d869a;
+  font-size: clamp(9px, 3.6cqw, 12px);
+}
+.branch-card__stats {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  gap: 3cqw;
+  margin-top: 4cqw;
+}
+.branch-card__stats > span {
+  display: flex;
+  flex-direction: column;
+  padding: 2.5cqw 4cqw;
+  border-radius: 4cqw;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--bp-border);
+}
+.branch-card__stats b { font-size: clamp(14px, 6cqw, 20px); line-height: 1.2; }
+.branch-card__stats small { color: #7d869a; font-size: clamp(9px, 3.4cqw, 12px); }
+
+/* =====================================================
+   Right: info panel (slides with the grid columns)
+   ===================================================== */
+.branch-detail-panel {
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(28px);
+  transition:
+    opacity calc(var(--bp-speed) * 0.8) var(--bp-ease),
+    transform var(--bp-speed) var(--bp-ease),
+    visibility 0s linear var(--bp-speed);
+}
+.branch-detail-panel.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+  transition:
+    opacity var(--bp-speed) var(--bp-ease) 0.08s,
+    transform var(--bp-speed) var(--bp-ease),
+    visibility 0s;
+}
+/* fixed min width so the content does not reflow while the column animates */
+.branch-detail-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 420px;
+  height: 100%;
+  background: var(--bp-surface);
+  border: 1px solid var(--bp-border);
+  border-radius: 20px;
+  overflow: hidden;
+}
+.branch-detail-close {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--bp-border);
+  border-radius: 9px;
+  background: var(--bp-surface-2);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.branch-detail-close:hover { background: rgba(124, 140, 255, 0.2); border-color: var(--bp-accent); }
+
+.branch-detail-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 52px 16px 16px;
+}
+.branch-workspace-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding: 16px;
+  background: var(--bp-surface-2);
+  border: 1px solid var(--bp-border);
+  border-radius: 16px;
+}
+.branch-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.branch-workspace-detail-grid {
+  display: grid;
+  gap: 14px;
+}
+.branch-stock-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+/* thin scrollbars, same look in both panels */
+.branches-grid,
+.branch-detail-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+/* =====================================================
+   Tablet / small screens: info panel becomes a slide-over drawer
+   ===================================================== */
+@media (max-width: 1100px) {
+  .branches-layout,
+  .branches-layout.has-panel {
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: 0;
+    height: auto;
+    min-height: 0;
+  }
+  .branches-list-panel { height: auto; }
+  .branches-grid { overflow: visible; }
+
+  .branch-detail-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    width: min(520px, 100vw);
+    height: 100dvh;
+    padding: 12px;
+    background: rgba(5, 8, 14, 0.82);
+    backdrop-filter: blur(6px);
+    transform: translateX(100%);
+  }
+  .branch-detail-panel.is-open { transform: translateX(0); }
+  .branch-detail-inner { min-width: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .branches-layout,
+  .branch-detail-panel,
+  .branch-card { transition: none; }
+}

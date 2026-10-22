@@ -1,0 +1,23 @@
+Herald Four-Branch Upgrade Validation
+Date: 2026-07-27
+
+PASSED
+- PHP syntax validation for application, routes, migrations, seeders, and tests.
+- Laravel route discovery for the four branch API endpoints and sync-status endpoint.
+- JavaScript syntax validation for branch-assets/branch.js and app/live-sync.js.
+- Static HTML structure validation for branch-1, branch-2, branch-3, and branch-4.
+- Required branch assets, setup guide, migration, models, controller, routes, and network scripts are present.
+- Seeder review confirms regular setup preserves existing passwords and stock balances; fresh reset still recreates test data.
+- Atomic stock workflow uses database transactions and row locks.
+- Duplicate client references are idempotent and do not deduct stock twice.
+
+ENVIRONMENT LIMITATIONS DURING PACKAGE VALIDATION
+- The Linux validation container's PHP binary does not include DOM, mbstring, xmlwriter, pdo_mysql, or pdo_sqlite, so PHPUnit and a live database HTTP test could not run here.
+- The supplied XAMPP setup script explicitly verifies the required PHP extensions before installation.
+- The npm registry was not reachable from the validation container. The existing prebuilt main Herald app remains included, and live shared-data refresh was added as a standalone prebuilt script. Updated React source is also included for future rebuilds.
+
+RUN ON THE TARGET XAMPP COMPUTER
+- SETUP_XAMPP.bat
+- RUN_BACKEND_TESTS.bat
+- START_HERALD.bat
+- VERIFY_RUNNING_HERALD.bat
