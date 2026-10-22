@@ -15,7 +15,7 @@ import Inventory from './pages/Inventory';
 import SupplyRequests from './pages/SupplyRequests';
 import Analytics from './pages/Analytics';
 import Branches from './pages/Branches';
-import AdminSettings from './pages/AdminSettings';
+// AdminSettings import removed
 import Messenger from './pages/Messenger';
 
 function RoleRedirect() {
@@ -40,25 +40,70 @@ export default function App() {
               <Route element={<AppShell />}>
                 <Route path="/chat" element={<Messenger />} />
                 <Route path="/messages" element={<Navigate to="/chat" replace />} />
-              <Route element={<RoleGuard roles={['admin']} />}><Route path="/admin-dashboard" element={<Dashboard />} /><Route path="/users" element={<Users />} /><Route path="/admin-settings" element={<AdminSettings />} /></Route>
-              <Route element={<RoleGuard roles={['marketing']} />}><Route path="/marketing-dashboard" element={<Dashboard />} /></Route>
-              <Route element={<RoleGuard roles={['sales']} />}><Route path="/sales-dashboard" element={<Dashboard />} /></Route>
-              <Route element={<RoleGuard roles={['logistics']} />}><Route path="/logistics-dashboard" element={<Dashboard />} /></Route>
-              <Route element={<RoleGuard roles={['franchisee']} />}><Route path="/franchisee-dashboard" element={<Dashboard />} /></Route>
-              <Route element={<RoleGuard roles={['admin','marketing','sales']} />}><Route path="/inquiries" element={<Inquiries />} /><Route path="/marketing-inquiries" element={<Navigate to="/inquiries" replace />} /></Route>
-              <Route element={<RoleGuard roles={['admin','sales','franchisee']} />}><Route path="/applicants" element={<Applicants />} /><Route path="/activities" element={<Activities />} /></Route>
-              <Route element={<RoleGuard roles={['admin','logistics']} />}><Route path="/branches" element={<Branches />} /></Route>
-              <Route element={<RoleGuard roles={['admin','logistics','franchisee']} />}><Route path="/inventory" element={<Inventory />} /></Route>
-              <Route element={<RoleGuard roles={['admin','sales','logistics','franchisee']} />}><Route path="/supply-requests" element={<SupplyRequests />} /></Route>
-              <Route element={<RoleGuard roles={['admin','marketing','sales','logistics']} />}><Route path="/analytics" element={<Analytics />} /></Route>
-              <Route path="/franchise-management" element={<Navigate to="/applicants" replace />} />
-              <Route path="/user-management" element={<Navigate to="/users" replace />} />
-              <Route path="/supply-chain" element={<Navigate to="/supply-requests" replace />} />
-              <Route path="/analytics-dashboard" element={<Navigate to="/analytics" replace />} />
+
+                {/* Admin routes */}
+                <Route element={<RoleGuard roles={['admin']} />}>
+                  <Route path="/admin-dashboard" element={<Dashboard />} />
+                  <Route path="/users" element={<Users />} />
+                  {/* /admin-settings route removed */}
+                </Route>
+
+                {/* Marketing */}
+                <Route element={<RoleGuard roles={['marketing']} />}>
+                  <Route path="/marketing-dashboard" element={<Dashboard />} />
+                </Route>
+
+                {/* Sales */}
+                <Route element={<RoleGuard roles={['sales']} />}>
+                  <Route path="/sales-dashboard" element={<Dashboard />} />
+                </Route>
+
+                {/* Logistics */}
+                <Route element={<RoleGuard roles={['logistics']} />}>
+                  <Route path="/logistics-dashboard" element={<Dashboard />} />
+                </Route>
+
+                {/* Franchisee */}
+                <Route element={<RoleGuard roles={['franchisee']} />}>
+                  <Route path="/franchisee-dashboard" element={<Dashboard />} />
+                </Route>
+
+                {/* Shared routes */}
+                <Route element={<RoleGuard roles={['admin', 'marketing', 'sales']} />}>
+                  <Route path="/inquiries" element={<Inquiries />} />
+                  <Route path="/marketing-inquiries" element={<Navigate to="/inquiries" replace />} />
+                </Route>
+
+                <Route element={<RoleGuard roles={['admin', 'sales', 'franchisee']} />}>
+                  <Route path="/applicants" element={<Applicants />} />
+                  <Route path="/activities" element={<Activities />} />
+                </Route>
+
+                <Route element={<RoleGuard roles={['admin', 'logistics']} />}>
+                  <Route path="/branches" element={<Branches />} />
+                </Route>
+
+                <Route element={<RoleGuard roles={['admin', 'logistics', 'franchisee']} />}>
+                  <Route path="/inventory" element={<Inventory />} />
+                </Route>
+
+                <Route element={<RoleGuard roles={['admin', 'sales', 'logistics', 'franchisee']} />}>
+                  <Route path="/supply-requests" element={<SupplyRequests />} />
+                </Route>
+
+                <Route element={<RoleGuard roles={['admin', 'marketing', 'sales', 'logistics']} />}>
+                  <Route path="/analytics" element={<Analytics />} />
+                </Route>
+
+                {/* Legacy redirects */}
+                <Route path="/franchise-management" element={<Navigate to="/applicants" replace />} />
+                <Route path="/user-management" element={<Navigate to="/users" replace />} />
+                <Route path="/supply-chain" element={<Navigate to="/supply-requests" replace />} />
+                <Route path="/analytics-dashboard" element={<Navigate to="/analytics" replace />} />
+              </Route>
             </Route>
-          </Route>
-          <Route path="*" element={<RoleRedirect />} />
-        </Routes>
+            <Route path="*" element={<RoleRedirect />} />
+          </Routes>
         </ChatProvider>
       </AuthProvider>
     </BrowserRouter>

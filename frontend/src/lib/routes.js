@@ -8,7 +8,6 @@ export const routeTitles = {
   '/applicants': ['Applicant pipeline', 'Candidate progress and approvals'],
   '/activities': ['Activities & schedules', 'Orientations, training, and events'],
   '/users': ['User management', 'Accounts and role-based access'],
-  '/admin-settings': ['Admin settings', 'Archive and restore records'],
   '/branches': ['Branches', 'Branch stock, deductions, and requests'],
   '/inventory': ['Inventory', 'Warehouse stock and thresholds'],
   '/supply-requests': ['Supply requests', 'Ordering and fulfillment workflow'],
