@@ -13,7 +13,6 @@ import {
   FaStore,
   FaUserShield,
   FaUsers,
-  FaGear,
 } from 'react-icons/fa6';
 import AppIconImg from '../../../assets/icon.png.png';
 import { useAuth } from '../../../context/AuthContext';
@@ -37,7 +36,7 @@ const navigation = {
       item('Warehouse inventory', '/inventory', FaBoxesStacked, 'Central stock visibility'),
       item('Supply requests', '/supply-requests', FaClipboardList, 'Fulfillment workflow'),
       item('Users', '/users', FaUserShield, 'Access control'),
-      item('Admin settings', '/admin-settings', FaGear, 'Archive and restore'),
+      // Admin settings removed – now lives in the Current User profile panel
     ] },
     { label: 'Intelligence', items: [item('Analytics', '/analytics', FaChartLine, 'Performance insights')] },
   ],
@@ -171,14 +170,21 @@ export default function Sidebar({ isCollapsed, setIsCollapsed, onNavigate }) {
         >
           <div className="confirmation-copy">
             <span className="confirmation-icon"><FaRightFromBracket /></span>
-            <div><strong>You will return to the sign-in screen.</strong><p>Any saved server data remains safe. Unsaved form entries in this browser will be cleared.</p></div>
+            <div>
+              <strong>You will return to the sign-in screen.</strong>
+              <p>Any saved server data remains safe. Unsaved form entries in this browser will be cleared.</p>
+            </div>
           </div>
         </Modal>
       )}
 
       {loggingOut && (
         <div className="logout-overlay" role="status" aria-live="polite">
-          <div className="logout-card"><span className="spinner" /><strong>Signing out securely…</strong><small>Closing your authenticated session</small></div>
+          <div className="logout-card">
+            <span className="spinner" />
+            <strong>Signing out securely…</strong>
+            <small>Closing your authenticated session</small>
+          </div>
         </div>
       )}
     </>
